@@ -21,6 +21,18 @@ async function getLiveMatches(req, res) {
   res.send(response);
 }
 
+async function getFinishedMatchesToday(req, res) {
+  const response = await Match.findAll({
+    where: {
+      match_day: current_date,
+      full_time: { [Op.lte]: current_time },
+    },
+  });
+
+  res.send(response);
+}
+
 module.exports = {
   getLiveMatches,
+  getFinishedMatchesToday,
 };
