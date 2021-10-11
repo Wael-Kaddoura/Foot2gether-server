@@ -6,5 +6,6 @@ const router = express.Router();
 
 router.get("/live", MatchController.getLiveMatches);
 router.get("/finished", MatchController.getFinishedMatchesToday);
+router.get("/upcoming", MatchController.getUpcomingMatchesToday);
 
 module.exports = router;
