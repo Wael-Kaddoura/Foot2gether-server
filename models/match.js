@@ -11,8 +11,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Match.init(
     {
-      date: {
-        type: Sequelize.DATE,
+      match_day: {
+        type: Sequelize.DATEONLY,
+      },
+      kick_off: {
+        type: Sequelize.TIME,
       },
       competition_id: {
         type: Sequelize.INTEGER,
