@@ -20,6 +20,7 @@
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.0",
-    "sequelize": "^6.6.5"
+    "sequelize": "^6.6.5",
+    "tzdata": "^1.0.27"
   }
 }
