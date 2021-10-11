@@ -14,6 +14,9 @@ module.exports = {
       kick_off: {
         type: Sequelize.TIME,
       },
+      full_time: {
+        type: Sequelize.TIME,
+      },
       competition_id: {
         type: Sequelize.INTEGER,
       },
