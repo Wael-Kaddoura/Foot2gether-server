@@ -8,8 +8,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      date: {
-        type: Sequelize.DATE,
+      match_day: {
+        type: Sequelize.DATEONLY,
+      },
+      kick_off: {
+        type: Sequelize.TIME,
       },
       competition_id: {
         type: Sequelize.INTEGER,
