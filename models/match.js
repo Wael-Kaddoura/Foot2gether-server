@@ -1,15 +1,13 @@
 "use strict";
 const { Sequelize, DataTypes, Model } = require("sequelize");
-const sequelize = new Sequelize("sqlite::memory:", {
+const sequelize = new Sequelize("mysql::memory:", {
   define: {
     tableName: "matches",
   },
 });
 module.exports = (sequelize, DataTypes) => {
   class Match extends Model {
-    static associate(models) {
-      // define association here
-    }
+    static associate(models) {}
   }
   Match.init(
     {
