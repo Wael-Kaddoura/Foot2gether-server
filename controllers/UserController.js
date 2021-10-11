@@ -3,7 +3,6 @@ const bcryptjs = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 
 const Models = require("../models");
-const { has } = require("lodash");
 const User = Models.User;
 
 function userIndex(req, res) {
