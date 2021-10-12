@@ -139,7 +139,18 @@ async function getFollowingUsers(req, res) {
 
   const response = await UserFollower.findAll({
     where: { user_id: my_id },
-    include: User,
+    include: "following",
+  });
+
+  res.send(response);
+}
+
+async function getFollowersUsers(req, res) {
+  const my_id = 1;
+
+  const response = await UserFollower.findAll({
+    where: { following_id: my_id },
+    include: "follower",
   });
 
   res.send(response);
@@ -150,4 +161,5 @@ module.exports = {
   signUp,
   searchUsersByUsername,
   getFollowingUsers,
+  getFollowersUsers,
 };

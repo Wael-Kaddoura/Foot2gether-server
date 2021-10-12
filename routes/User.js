@@ -8,6 +8,7 @@ router.post("/signup", UserController.signUp);
 router.post("/login", UserController.login);
 
 router.get("/following", UserController.getFollowingUsers);
+router.get("/followers", UserController.getFollowersUsers);
 router.get("/:username", UserController.searchUsersByUsername);
 
 module.exports = router;
