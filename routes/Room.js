@@ -4,4 +4,6 @@ const checkAuthMiddleware = require("../middleware/check-auth");
 
 const router = express.Router();
 
+router.get("/search/:room_id", RoomController.searchRoomById);
+
 module.exports = router;
