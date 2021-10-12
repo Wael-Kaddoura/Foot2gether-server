@@ -14,6 +14,17 @@ async function getRoomById(req, res) {
   res.send(response);
 }
 
+async function getMatchRooms(req, res) {
+  const { match_id } = req.body;
+
+  const response = await Room.findAll({
+    where: { match_id: match_id },
+  });
+
+  res.send(response);
+}
+
 module.exports = {
   getRoomById,
+  getMatchRooms,
 };
