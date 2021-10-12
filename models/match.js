@@ -1,13 +1,17 @@
-"use strict";
 const { Sequelize, DataTypes, Model } = require("sequelize");
 const sequelize = new Sequelize("mysql::memory:", {
   define: {
     tableName: "matches",
   },
 });
+
 module.exports = (sequelize, DataTypes) => {
   class Match extends Model {
-    static associate(models) {}
+    // static associate(models) {
+    //   Match.hasMany(models.Room, {
+    //     foreignKey: "match_id",
+    //   });
+    // }
   }
   Match.init(
     {
@@ -41,5 +45,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Match",
     }
   );
+
   return Match;
 };

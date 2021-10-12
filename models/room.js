@@ -1,9 +1,10 @@
-"use strict";
 const { Sequelize, DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Room extends Model {
-    static associate(models) {}
+    static associate(models) {
+      // Room.belongsTo(models.Match);
+    }
   }
   Room.init(
     {
