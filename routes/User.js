@@ -7,6 +7,6 @@ const router = express.Router();
 router.post("/signup", UserController.signUp);
 router.post("/login", UserController.login);
 
-router.use(checkAuthMiddleware.checkAuth);
+router.get("/:username", UserController.searchUsersByUsername);
 
 module.exports = router;

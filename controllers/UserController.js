@@ -1,3 +1,5 @@
+const { Sequelize } = require("sequelize");
+const Op = Sequelize.Op;
 const Validator = require("fastest-validator");
 const bcryptjs = require("bcryptjs");
 const JWT = require("jsonwebtoken");
@@ -123,7 +125,18 @@ async function signUp(req, res) {
   }
 }
 
+async function searchUsersByUsername(req, res) {
+  const { username } = req.params;
+
+  const response = await User.findAll({
+    where: { username: { [Op.like]: "%" + username + "%" } },
+  });
+
+  res.send(response);
+}
+
 module.exports = {
   login,
   signUp,
+  searchUsersByUsername,
 };
