@@ -4,8 +4,7 @@ const Validator = require("fastest-validator");
 const bcryptjs = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 
-const Models = require("../models");
-const User = Models.User;
+const { User, UserFollower } = require("../models");
 
 async function login(req, res) {
   const v = new Validator();
@@ -135,8 +134,20 @@ async function searchUsersByUsername(req, res) {
   res.send(response);
 }
 
+async function getFollowingUsers(req, res) {
+  const my_id = 2;
+
+  const response = await UserFollower.findAll({
+    where: { user_id: my_id },
+    include: User,
+  });
+
+  res.send(response);
+}
+
 module.exports = {
   login,
   signUp,
   searchUsersByUsername,
+  getFollowingUsers,
 };
