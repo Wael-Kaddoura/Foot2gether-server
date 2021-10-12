@@ -1,8 +1,7 @@
 const { Sequelize } = require("sequelize");
 const Op = Sequelize.Op;
 
-const Models = require("../models");
-const Room = Models.Room;
+// const { Room } = require("../models");
 
 async function getRoomById(req, res) {
   const { room_id } = req.params;

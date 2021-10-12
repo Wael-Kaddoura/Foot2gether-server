@@ -2,8 +2,7 @@ const { Sequelize } = require("sequelize");
 const date = require("date-and-time");
 const Op = Sequelize.Op;
 
-const Models = require("../models");
-const Match = Models.Match;
+// const { Match } = require("../models");
 
 const current_date_time = new Date();
 const current_date = date.format(current_date_time, "YYYY-MM-DD");
