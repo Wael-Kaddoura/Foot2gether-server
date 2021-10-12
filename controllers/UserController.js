@@ -156,10 +156,26 @@ async function getFollowersUsers(req, res) {
   res.send(response);
 }
 
+async function followUser(req, res) {
+  const my_id = 1;
+  const { followed_user_id } = req.body;
+
+  const response = await UserFollower.create({
+    user_id: my_id,
+    following_id: followed_user_id,
+  });
+
+  return res.status(200).json({
+    response: response,
+    message: "User Followed Successfully!",
+  });
+}
+
 module.exports = {
   login,
   signUp,
   searchUsersByUsername,
   getFollowingUsers,
   getFollowersUsers,
+  followUser,
 };

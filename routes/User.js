@@ -11,4 +11,6 @@ router.get("/following", UserController.getFollowingUsers);
 router.get("/followers", UserController.getFollowersUsers);
 router.get("/:username", UserController.searchUsersByUsername);
 
+router.post("/follow", UserController.followUser);
+
 module.exports = router;
