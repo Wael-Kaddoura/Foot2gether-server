@@ -4,7 +4,7 @@ const Op = Sequelize.Op;
 const Models = require("../models");
 const Room = Models.Room;
 
-async function searchRoomById(req, res) {
+async function getRoomById(req, res) {
   const { room_id } = req.params;
 
   const response = await Room.findOne({
@@ -15,5 +15,5 @@ async function searchRoomById(req, res) {
 }
 
 module.exports = {
-  searchRoomById,
+  getRoomById,
 };
