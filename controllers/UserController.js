@@ -35,7 +35,6 @@ async function login(req, res) {
         if (result) {
           const token = JWT.sign(
             {
-              email: email,
               user_id: user.id,
             },
             process.env.JWT_KEY,
