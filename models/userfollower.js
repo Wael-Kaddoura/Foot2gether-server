@@ -1,10 +1,5 @@
 "use strict";
 const { Sequelize, DataTypes, Model } = require("sequelize");
-const sequelize = new Sequelize("mysql::memory:", {
-  define: {
-    tableName: "users_followers",
-  },
-});
 
 module.exports = (sequelize, DataTypes) => {
   class UserFollower extends Model {
@@ -14,7 +9,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.User, {
+        as: "following",
+        foreignKey: "following_id",
+      });
+      this.belongsTo(models.User, {
+        as: "follower",
+        foreignKey: "user_id",
+      });
     }
   }
   UserFollower.init(
@@ -28,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
+      tableName: "users_followers",
       modelName: "UserFollower",
     }
   );
