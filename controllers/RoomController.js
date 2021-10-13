@@ -30,7 +30,7 @@ async function getUserRooms(req, res) {
 
   const response = await Room.findAll({
     where: { creator_id: user_id },
-    include: "creator",
+    include: "match",
   });
 
   res.send(response);

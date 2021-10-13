@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         as: "creator",
         foreignKey: "creator_id",
       });
+
+      this.belongsTo(models.Match, {
+        as: "match",
+        foreignKey: "match_id",
+      });
     }
   }
   Room.init(

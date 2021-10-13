@@ -3,6 +3,11 @@ const { Sequelize, DataTypes, Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Match extends Model {
     static associate(models) {
+      this.hasMany(models.Room, {
+        as: "match",
+        foreignKey: "match_id",
+      });
+
       this.belongsTo(models.Competition, {
         as: "competition",
         foreignKey: "competition_id",
