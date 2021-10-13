@@ -1,18 +1,25 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
-const sequelize = new Sequelize("mysql::memory:", {
-  define: {
-    tableName: "matches",
-  },
-});
 
 module.exports = (sequelize, DataTypes) => {
   class Match extends Model {
-    // static associate(models) {
-    //   Match.hasMany(models.Room, {
-    //     foreignKey: "match_id",
-    //   });
-    // }
+    static associate(models) {
+      this.belongsTo(models.Competition, {
+        as: "competition",
+        foreignKey: "competition_id",
+      });
+
+      this.belongsTo(models.Team, {
+        as: "team1",
+        foreignKey: "team1_id",
+      });
+
+      this.belongsTo(models.Team, {
+        as: "team2",
+        foreignKey: "team2_id",
+      });
+    }
   }
+
   Match.init(
     {
       match_day: {

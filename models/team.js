@@ -1,11 +1,31 @@
-const { Model } = require("sequelize");
+const { Sequelize, DataTypes, Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class Team extends Model {
-    static associate(models) {}
+    static associate(models) {
+      this.hasMany(models.Match, {
+        as: "team1",
+        foreignKey: "team1_id",
+      });
+
+      this.hasMany(models.Match, {
+        as: "team2",
+        foreignKey: "team2_id",
+      });
+    }
   }
+
   Team.init(
     {
-      name: DataTypes.STRING,
+      name: {
+        type: Sequelize.STRING,
+      },
+      country: {
+        type: Sequelize.STRING,
+      },
+      logo: {
+        type: Sequelize.STRING,
+      },
     },
     {
       sequelize,
