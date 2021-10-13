@@ -11,6 +11,7 @@ router.get("/following", UserController.getFollowing);
 router.get("/followers", UserController.getFollowers);
 
 router.get("/following_count", UserController.getFollowingCount);
+router.get("/followers_count", UserController.getFollowersCount);
 
 router.get("/:username", UserController.searchUsersByUsername);
 

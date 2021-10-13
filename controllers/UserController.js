@@ -203,6 +203,21 @@ async function getFollowingCount(req, res) {
   res.send(following_count);
 }
 
+async function getFollowersCount(req, res) {
+  const my_id = 1;
+
+  const response = await UserFollower.findAll({
+    attributes: [
+      [Sequelize.fn("COUNT", Sequelize.col("id")), "followers_count"],
+    ],
+    where: { following_id: my_id },
+  });
+
+  const followers_count = response[0];
+
+  res.send(followers_count);
+}
+
 module.exports = {
   login,
   signUp,
@@ -212,4 +227,5 @@ module.exports = {
   followUser,
   unfollowUser,
   getFollowingCount,
+  getFollowersCount,
 };
