@@ -64,11 +64,22 @@ async function editBlog(req, res) {
     });
   }
 
-  const { edited_blog_id, title, body, image } = req.body;
+  const { id } = req.params;
+  const { title, body, image } = req.body;
   const edited_blog = { title, body, image };
 
   const response = await Blog.update(edited_blog, {
-    where: { id: edited_blog_id },
+    where: { id: id },
+  });
+
+  res.status(204).send();
+}
+
+async function deleteBlog(req, res) {
+  const { id } = req.params;
+
+  const response = Blog.destroy({
+    where: { id: id },
   });
 
   res.status(204).send();
@@ -79,4 +90,5 @@ module.exports = {
   getBlog,
   createBlog,
   editBlog,
+  deleteBlog,
 };
