@@ -12,9 +12,15 @@ module.exports = (sequelize, DataTypes) => {
         as: "following",
         foreignKey: "following_id",
       });
+
       this.hasMany(models.UserFollower, {
         as: "follower",
         foreignKey: "user_id",
+      });
+
+      this.belongsTo(models.Team, {
+        as: "fav_team",
+        foreignKey: "fav_team_id",
       });
     }
   }
