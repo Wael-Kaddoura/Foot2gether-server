@@ -3,7 +3,7 @@ const Validator = require("fastest-validator");
 const { Blog } = require("../models");
 
 async function getBlogs(req, res) {
-  const response = await Blog.findAll();
+  const response = await Blog.findAll({ include: "author" });
 
   res.send(response);
 }
@@ -13,6 +13,7 @@ async function getBlog(req, res) {
 
   const response = await Blog.findOne({
     where: { id: id },
+    include: "author",
   });
 
   res.send(response);
