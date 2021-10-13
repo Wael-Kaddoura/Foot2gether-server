@@ -8,6 +8,16 @@ async function getBlogs(req, res) {
   res.send(response);
 }
 
+async function getBlog(req, res) {
+  const { id } = req.params;
+
+  const response = await Blog.findOne({
+    where: { id: id },
+  });
+
+  res.send(response);
+}
+
 async function createBlog(req, res) {
   const v = new Validator();
   const schema = {
@@ -39,5 +49,6 @@ async function createBlog(req, res) {
 
 module.exports = {
   getBlogs,
+  getBlog,
   createBlog,
 };
