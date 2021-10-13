@@ -40,7 +40,7 @@ async function login(req, res) {
             },
             process.env.JWT_KEY,
             (err, token) => {
-              return res.status(200).json({
+              return res.json({
                 message: "Authentication Successful!",
                 token: token,
               });
@@ -165,7 +165,7 @@ async function followUser(req, res) {
     following_id: followed_user_id,
   });
 
-  return res.status(200).json({
+  res.send({
     response: response,
     message: "User Followed Successfully!",
   });
@@ -182,7 +182,7 @@ async function unfollowUser(req, res) {
     },
   });
 
-  return res.status(200).json({
+  res.send({
     response: response,
     message: "User Unfollowed Successfully!",
   });
@@ -218,6 +218,16 @@ async function getFollowersCount(req, res) {
   res.send(followers_count);
 }
 
+async function getUser(req, res) {
+  const { id } = req.params;
+
+  const response = await User.findOne({
+    where: { id: id },
+  });
+
+  res.send(response);
+}
+
 module.exports = {
   login,
   signUp,
@@ -228,4 +238,5 @@ module.exports = {
   unfollowUser,
   getFollowingCount,
   getFollowersCount,
+  getUser,
 };

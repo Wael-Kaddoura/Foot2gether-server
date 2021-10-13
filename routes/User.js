@@ -9,11 +9,11 @@ router.post("/login", UserController.login);
 
 router.get("/following", UserController.getFollowing);
 router.get("/followers", UserController.getFollowers);
-
 router.get("/following_count", UserController.getFollowingCount);
 router.get("/followers_count", UserController.getFollowersCount);
 
-router.get("/:username", UserController.searchUsersByUsername);
+router.get("/:id", UserController.getUser);
+router.get("/search/:username", UserController.searchUsersByUsername);
 
 router.post("/follow", UserController.followUser);
 router.post("/unfollow", UserController.unfollowUser);
