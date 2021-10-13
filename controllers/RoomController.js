@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const Op = Sequelize.Op;
 
-// const { Room } = require("../models");
+const { Room } = require("../models");
 
 async function getRoomById(req, res) {
   const { room_id } = req.params;
@@ -23,7 +23,18 @@ async function getMatchRooms(req, res) {
   res.send(response);
 }
 
+async function getUserRooms(req, res) {
+  const { user_id } = req.body;
+
+  const response = await Room.findAll({
+    where: { creator_id: user_id },
+  });
+
+  res.send(response);
+}
+
 module.exports = {
   getRoomById,
   getMatchRooms,
+  getUserRooms,
 };
