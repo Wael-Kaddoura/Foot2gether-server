@@ -134,7 +134,7 @@ async function searchUsersByUsername(req, res) {
   res.send(response);
 }
 
-async function getFollowingUsers(req, res) {
+async function getFollowing(req, res) {
   const my_id = 2;
 
   const response = await UserFollower.findAll({
@@ -145,7 +145,7 @@ async function getFollowingUsers(req, res) {
   res.send(response);
 }
 
-async function getFollowersUsers(req, res) {
+async function getFollowers(req, res) {
   const my_id = 1;
 
   const response = await UserFollower.findAll({
@@ -188,12 +188,28 @@ async function unfollowUser(req, res) {
   });
 }
 
+async function getFollowingCount(req, res) {
+  const my_id = 2;
+
+  const response = await UserFollower.findAll({
+    attributes: [
+      [Sequelize.fn("COUNT", Sequelize.col("id")), "following_count"],
+    ],
+    where: { user_id: my_id },
+  });
+
+  const following_count = response[0];
+
+  res.send(following_count);
+}
+
 module.exports = {
   login,
   signUp,
   searchUsersByUsername,
-  getFollowingUsers,
-  getFollowersUsers,
+  getFollowing,
+  getFollowers,
   followUser,
   unfollowUser,
+  getFollowingCount,
 };

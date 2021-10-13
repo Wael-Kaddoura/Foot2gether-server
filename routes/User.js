@@ -7,8 +7,11 @@ const router = express.Router();
 router.post("/signup", UserController.signUp);
 router.post("/login", UserController.login);
 
-router.get("/following", UserController.getFollowingUsers);
-router.get("/followers", UserController.getFollowersUsers);
+router.get("/following", UserController.getFollowing);
+router.get("/followers", UserController.getFollowers);
+
+router.get("/following_count", UserController.getFollowingCount);
+
 router.get("/:username", UserController.searchUsersByUsername);
 
 router.post("/follow", UserController.followUser);
