@@ -60,9 +60,26 @@ async function getLiveMatchesCount(req, res) {
   res.send(live_count);
 }
 
+async function getFinishedMatchesCount(req, res) {
+  const response = await Match.findAll({
+    attributes: [
+      [Sequelize.fn("COUNT", Sequelize.col("id")), "finished_count"],
+    ],
+    where: {
+      match_day: current_date,
+      full_time: { [Op.lte]: current_time },
+    },
+  });
+
+  const finished_count = response[0];
+
+  res.send(finished_count);
+}
+
 module.exports = {
   getLiveMatches,
   getFinishedMatchesToday,
   getUpcomingMatchesToday,
   getLiveMatchesCount,
+  getFinishedMatchesCount,
 };
