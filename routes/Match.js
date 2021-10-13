@@ -9,6 +9,7 @@ router.get("/finished", MatchController.getFinishedMatchesToday);
 router.get("/upcoming", MatchController.getUpcomingMatchesToday);
 
 router.get("/live_count", MatchController.getLiveMatchesCount);
-router.get("/finished_count", MatchController.getFinishedMatchesCount);
+router.get("/finished_count", MatchController.getFinishedMatchesTodayCount);
+router.get("/upcoming_count", MatchController.getUpcomingMatchesTodayCount);
 
 module.exports = router;
