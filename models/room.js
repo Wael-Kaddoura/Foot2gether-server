@@ -3,7 +3,10 @@ const { Sequelize, DataTypes, Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Room extends Model {
     static associate(models) {
-      // Room.belongsTo(models.Match);
+      this.belongsTo(models.User, {
+        as: "creator",
+        foreignKey: "creator_id",
+      });
     }
   }
   Room.init(

@@ -8,6 +8,7 @@ async function getRoomById(req, res) {
 
   const response = await Room.findOne({
     where: { id: room_id },
+    include: "creator",
   });
 
   res.send(response);
@@ -18,6 +19,7 @@ async function getMatchRooms(req, res) {
 
   const response = await Room.findAll({
     where: { match_id: match_id },
+    include: "creator",
   });
 
   res.send(response);
@@ -28,6 +30,7 @@ async function getUserRooms(req, res) {
 
   const response = await Room.findAll({
     where: { creator_id: user_id },
+    include: "creator",
   });
 
   res.send(response);

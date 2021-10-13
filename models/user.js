@@ -18,6 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "user_id",
       });
 
+      this.hasMany(models.Room, {
+        as: "creator",
+        foreignKey: "creator_id",
+      });
+
       this.belongsTo(models.Team, {
         as: "fav_team",
         foreignKey: "fav_team_id",
