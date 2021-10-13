@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
-const date = require("date-and-time");
 const Op = Sequelize.Op;
+const date = require("date-and-time");
 
 const { Match } = require("../models");
 
@@ -45,8 +45,24 @@ async function getUpcomingMatchesToday(req, res) {
   res.send(response);
 }
 
+async function getLiveMatchesCount(req, res) {
+  const response = await Match.findAll({
+    attributes: [[Sequelize.fn("COUNT", Sequelize.col("id")), "live_count"]],
+    where: {
+      match_day: current_date,
+      kick_off: { [Op.lte]: current_time },
+      full_time: { [Op.gte]: current_time },
+    },
+  });
+
+  const live_count = response[0];
+
+  res.send(live_count);
+}
+
 module.exports = {
   getLiveMatches,
   getFinishedMatchesToday,
   getUpcomingMatchesToday,
+  getLiveMatchesCount,
 };
