@@ -2,7 +2,7 @@ const { Sequelize } = require("sequelize");
 const date = require("date-and-time");
 const Op = Sequelize.Op;
 
-// const { Match } = require("../models");
+const { Match } = require("../models");
 
 const current_date_time = new Date();
 const current_date = date.format(current_date_time, "YYYY-MM-DD");
@@ -15,6 +15,7 @@ async function getLiveMatches(req, res) {
       kick_off: { [Op.lte]: current_time },
       full_time: { [Op.gte]: current_time },
     },
+    include: { all: true },
   });
 
   res.send(response);
@@ -26,6 +27,7 @@ async function getFinishedMatchesToday(req, res) {
       match_day: current_date,
       full_time: { [Op.lte]: current_time },
     },
+    include: { all: true },
   });
 
   res.send(response);
@@ -37,6 +39,7 @@ async function getUpcomingMatchesToday(req, res) {
       match_day: current_date,
       kick_off: { [Op.gt]: current_time },
     },
+    include: { all: true },
   });
 
   res.send(response);
