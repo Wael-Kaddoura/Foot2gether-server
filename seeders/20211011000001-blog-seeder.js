@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("blogs", [
+    return queryInterface.bulkInsert("Blogs", [
       {
         title: "United's Odds in the Premier League",
         body: `On Monday, Manchester United confirmed the signing of Cristiano Ronaldo in an official statement posted on social media. The GOAT candidate is making a comeback to the team where he spent six seasons, from 2003 to 2009.
