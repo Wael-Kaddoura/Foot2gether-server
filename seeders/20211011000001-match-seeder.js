@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("matches", [
+    return queryInterface.bulkInsert("Matches", [
       {
         match_day: "2021-10-11",
         kick_off: "16:00:00",
