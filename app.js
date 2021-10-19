@@ -9,6 +9,7 @@ const matchRoute = require("./routes/Match");
 const roomRoute = require("./routes/Room");
 const blogRoute = require("./routes/Blog");
 const fcmRoute = require("./routes/FCM");
+const imageRoute = require("./routes/Image");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -18,6 +19,7 @@ app.use("/match", matchRoute);
 app.use("/room", roomRoute);
 app.use("/blog", blogRoute);
 app.use("/fcm", fcmRoute);
+app.use("/image", imageRoute);
 
 app.listen(port, () => {
   console.log("Listening on port", port);
