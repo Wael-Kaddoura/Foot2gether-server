@@ -20,6 +20,9 @@ module.exports = {
       competition_id: {
         type: Sequelize.INTEGER,
       },
+      stadium: {
+        type: Sequelize.INTEGER,
+      },
       team1_id: {
         type: Sequelize.INTEGER,
       },
