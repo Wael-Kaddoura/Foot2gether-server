@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Match extends Model {
     static associate(models) {
       this.hasMany(models.Room, {
-        as: "match",
+        as: "room",
         foreignKey: "match_id",
       });
 

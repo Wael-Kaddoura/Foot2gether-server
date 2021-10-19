@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsTo(models.Match, {
-        as: "match",
+        as: "room",
         foreignKey: "match_id",
       });
     }
