@@ -14,6 +14,7 @@ const imageRoute = require("./routes/Image");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/images", express.static("images/uploads"));
+app.use("/logos", express.static("images/teams_logos"));
 
 app.use("/user", userRoute);
 app.use("/match", matchRoute);
