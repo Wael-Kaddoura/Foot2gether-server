@@ -9,7 +9,7 @@ const current_date = date.format(current_date_time, "YYYY-MM-DD");
 const current_time = date.format(current_date_time, "HH:mm:ss");
 
 async function getMatch(req, res) {
-  const { id } = req.query;
+  const { id } = req.params;
 
   const response = await Match.findOne({
     where: {
