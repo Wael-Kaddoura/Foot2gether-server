@@ -12,4 +12,6 @@ router.get("/live_count", MatchController.getLiveMatchesCount);
 router.get("/finished_count", MatchController.getFinishedMatchesTodayCount);
 router.get("/upcoming_count", MatchController.getUpcomingMatchesTodayCount);
 
+router.get("/", MatchController.getMatch);
+
 module.exports = router;

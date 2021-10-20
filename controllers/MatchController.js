@@ -8,6 +8,19 @@ const current_date_time = new Date();
 const current_date = date.format(current_date_time, "YYYY-MM-DD");
 const current_time = date.format(current_date_time, "HH:mm:ss");
 
+async function getMatch(req, res) {
+  const { id } = req.query;
+
+  const response = await Match.findOne({
+    where: {
+      id: id,
+    },
+    include: { all: true },
+  });
+
+  res.send(response);
+}
+
 async function getLiveMatches(req, res) {
   const response = await Match.findAll({
     where: {
@@ -93,6 +106,7 @@ async function getUpcomingMatchesTodayCount(req, res) {
 }
 
 module.exports = {
+  getMatch,
   getLiveMatches,
   getFinishedMatchesToday,
   getUpcomingMatchesToday,
