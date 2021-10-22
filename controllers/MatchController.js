@@ -105,6 +105,20 @@ async function getUpcomingMatchesTodayCount(req, res) {
   res.send(upcoming_count);
 }
 
+async function getNextMatch(req, res) {
+  const response = await Match.findAll({
+    where: {
+      match_day: current_date,
+      kick_off: { [Op.gt]: current_time },
+    },
+    order: [[Sequelize.col("kick_off"), "ASC"]],
+    limit: 1,
+    include: { all: true },
+  });
+
+  res.send(response);
+}
+
 module.exports = {
   getMatch,
   getLiveMatches,
@@ -114,4 +128,5 @@ module.exports = {
   getFinishedMatchesTodayCount,
   getUpcomingMatchesTodayCount,
   getUpcomingMatchesTodayCount,
+  getNextMatch,
 };

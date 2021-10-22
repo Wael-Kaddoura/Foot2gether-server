@@ -7,6 +7,7 @@ const router = express.Router();
 router.get("/live", MatchController.getLiveMatches);
 router.get("/finished", MatchController.getFinishedMatchesToday);
 router.get("/upcoming", MatchController.getUpcomingMatchesToday);
+router.get("/next", MatchController.getNextMatch);
 
 router.get("/live_count", MatchController.getLiveMatchesCount);
 router.get("/finished_count", MatchController.getFinishedMatchesTodayCount);
