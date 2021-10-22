@@ -15,7 +15,7 @@ async function getRoomById(req, res) {
 }
 
 async function getMatchRooms(req, res) {
-  const { match_id } = req.body;
+  const { match_id } = req.params;
 
   const response = await Room.findAll({
     where: { match_id: match_id },
