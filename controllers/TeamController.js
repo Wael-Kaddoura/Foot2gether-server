@@ -10,6 +10,13 @@ async function getTeamLogo(req, res) {
   res.send(response);
 }
 
+async function getAllTeam(req, res) {
+  const response = await Team.findAll({});
+
+  res.send(response);
+}
+
 module.exports = {
   getTeamLogo,
+  getAllTeam,
 };
