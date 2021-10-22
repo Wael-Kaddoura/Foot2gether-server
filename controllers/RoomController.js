@@ -14,6 +14,14 @@ async function getRoomById(req, res) {
   res.send(response);
 }
 
+async function getLiveRooms(req, res) {
+  const response = await Room.findAll({
+    include: "creator",
+  });
+
+  res.send(response);
+}
+
 async function getMatchRooms(req, res) {
   const { match_id } = req.params;
 
@@ -38,6 +46,7 @@ async function getUserRooms(req, res) {
 
 module.exports = {
   getRoomById,
+  getLiveRooms,
   getMatchRooms,
   getUserRooms,
 };
