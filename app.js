@@ -19,6 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/images", express.static("images/uploads"));
 app.use("/logos", express.static("images/teams_logos"));
+app.use("/blogimg", express.static("images/blogs"));
 
 app.use("/user", userRoute);
 app.use("/match", matchRoute);
