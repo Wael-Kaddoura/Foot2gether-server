@@ -16,7 +16,7 @@ async function getRoomById(req, res) {
 
 async function getLiveRooms(req, res) {
   const response = await Room.findAll({
-    include: "creator",
+    include: ["matchroom", "creator"],
   });
 
   res.send(response);
