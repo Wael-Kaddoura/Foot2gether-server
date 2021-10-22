@@ -25,6 +25,7 @@ async function getBlogComments(req, res) {
 
   const response = await BlogComment.findAll({
     where: { blog_id: id },
+    include: { all: true },
   });
 
   res.send(response);
