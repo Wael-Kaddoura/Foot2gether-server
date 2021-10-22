@@ -22,6 +22,18 @@ async function getLiveRooms(req, res) {
   res.send(response);
 }
 
+async function getLiveRoomsCount(req, res) {
+  const response = await Room.findAll({
+    attributes: [
+      [Sequelize.fn("COUNT", Sequelize.col("id")), "live_rooms_count"],
+    ],
+  });
+
+  const live_rooms_count = response[0];
+
+  res.send(live_rooms_count);
+}
+
 async function getMatchRooms(req, res) {
   const { match_id } = req.params;
 
@@ -47,6 +59,7 @@ async function getUserRooms(req, res) {
 module.exports = {
   getRoomById,
   getLiveRooms,
+  getLiveRoomsCount,
   getMatchRooms,
   getUserRooms,
 };
