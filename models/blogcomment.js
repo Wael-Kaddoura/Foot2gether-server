@@ -1,10 +1,12 @@
 const { Sequelize, DataTypes, Model } = require("sequelize");
 
-const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class BlogComment extends Model {
     static associate(models) {
-      // define association here
+      this.belongsTo(models.Blog, {
+        as: "comments",
+        foreignKey: "blog_id",
+      });
     }
   }
   BlogComment.init(
