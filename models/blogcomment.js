@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         as: "comments",
         foreignKey: "blog_id",
       });
+
+      this.belongsTo(models.User, {
+        as: "comment_author",
+        foreignKey: "author_id",
+      });
     }
   }
   BlogComment.init(

@@ -28,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "author_id",
       });
 
+      this.hasMany(models.BlogComment, {
+        as: "comment_author",
+        foreignKey: "author_id",
+      });
+
       this.belongsTo(models.Team, {
         as: "fav_team",
         foreignKey: "fav_team_id",
