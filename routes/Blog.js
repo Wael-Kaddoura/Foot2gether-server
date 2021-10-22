@@ -4,6 +4,7 @@ const BlogController = require("../controllers/BlogController");
 const router = express.Router();
 
 router.get("/", BlogController.getBlogs);
+router.get("/latest", BlogController.getLatestBlogs);
 router.get("/:id", BlogController.getBlog);
 
 router.post("/", BlogController.createBlog);

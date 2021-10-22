@@ -1,9 +1,20 @@
+const { Sequelize } = require("sequelize");
 const Validator = require("fastest-validator");
 
 const { Blog } = require("../models");
 
 async function getBlogs(req, res) {
   const response = await Blog.findAll({ include: "author" });
+
+  res.send(response);
+}
+
+async function getLatestBlogs(req, res) {
+  const response = await Blog.findAll({
+    order: [[Sequelize.col("updatedAt"), "DESC"]],
+    limit: 2,
+    include: "author",
+  });
 
   res.send(response);
 }
@@ -88,6 +99,7 @@ async function deleteBlog(req, res) {
 
 module.exports = {
   getBlogs,
+  getLatestBlogs,
   getBlog,
   createBlog,
   editBlog,
