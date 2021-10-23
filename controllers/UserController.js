@@ -82,6 +82,11 @@ async function signUp(req, res) {
   }
 
   const { username, email, password, gender, fav_team_id } = req.body;
+  const profile_picture =
+    "http://localhost:8000/profile_picture/default_profile_picture.jpg";
+
+  const cover_photo =
+    "http://localhost:8000/cover_photo/default_cover_photo.jpg";
 
   const is_email_used = await User.findOne({ where: { email: email } });
   const is_username_used = await User.findOne({
@@ -105,6 +110,8 @@ async function signUp(req, res) {
           password: hash,
           gender,
           fav_team_id,
+          profile_picture,
+          cover_photo,
           user_type_id: 1,
         };
 
@@ -219,6 +226,46 @@ async function getFollowersCount(req, res) {
   res.send(followers_count);
 }
 
+async function getMyProfile(req, res) {
+  const id = req.userData.user_id;
+
+  const response = await User.findOne({
+    where: { id: id },
+    include: "fav_team",
+  });
+
+  res.send(response);
+}
+
+async function changeProfilePicture(req, res) {
+  const id = req.userData.user_id;
+
+  const user = await User.findOne({
+    where: { id: id },
+  });
+
+  user.profile_picture =
+    "http://localhost:8000/profile_picture/" + req.file.filename;
+
+  const response = await user.save();
+
+  res.send(response);
+}
+
+async function changeCoverPhoto(req, res) {
+  const id = req.userData.user_id;
+
+  const user = await User.findOne({
+    where: { id: id },
+  });
+
+  user.cover_photo = "http://localhost:8000/cover_photo/" + req.file.filename;
+
+  const response = await user.save();
+
+  res.send(response);
+}
+
 async function getUser(req, res) {
   const { id } = req.params;
 
@@ -240,5 +287,8 @@ module.exports = {
   unfollowUser,
   getFollowingCount,
   getFollowersCount,
+  getMyProfile,
+  changeProfilePicture,
+  changeCoverPhoto,
   getUser,
 };
