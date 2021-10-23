@@ -67,7 +67,8 @@ async function signUp(req, res) {
     username: { type: "string", optional: false, min: 2, max: 50 },
     email: { type: "email", optional: false, max: 100 },
     password: { type: "string", optional: false, min: 6 },
-    gender: { type: "number", optional: false },
+    confirm_password: { type: "equal", field: "password" },
+    gender: { type: "string", optional: false },
     fav_team_id: { type: "number", optional: false },
   };
 
