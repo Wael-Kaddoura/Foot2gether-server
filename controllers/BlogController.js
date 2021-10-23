@@ -110,6 +110,35 @@ async function deleteBlog(req, res) {
   res.status(204).send();
 }
 
+async function addComment(req, res) {
+  const v = new Validator();
+  const schema = {
+    body: { type: "string", optional: false, min: 1 },
+    blog_id: { type: "number", optional: false },
+  };
+
+  const validation_response = v.validate(req.body, schema);
+
+  if (validation_response !== true) {
+    return res.status(400).json({
+      message: "Please fill all required  fields!",
+      errors: validation_response,
+    });
+  }
+
+  const { body, blog_id } = req.body;
+  const author_id = req.userData.user_id;
+
+  const new_blog = { body, author_id, blog_id };
+
+  const response = await BlogComment.create(new_blog);
+
+  res.status(201).send({
+    message: "Comment Added Successfully!",
+    blog: response,
+  });
+}
+
 module.exports = {
   getBlogs,
   getLatestBlogs,
@@ -118,4 +147,5 @@ module.exports = {
   createBlog,
   editBlog,
   deleteBlog,
+  addComment,
 };

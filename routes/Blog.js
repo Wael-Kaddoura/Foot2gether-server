@@ -17,6 +17,8 @@ router.post(
   BlogImageUploader.upload.single("image"),
   BlogController.createBlog
 );
+router.post("/comment", BlogController.addComment);
+
 router.put("/:id", BlogController.editBlog);
 router.delete("/:id", BlogController.deleteBlog);
 
