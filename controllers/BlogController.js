@@ -47,8 +47,6 @@ async function createBlog(req, res) {
   const schema = {
     title: { type: "string", optional: false, min: 2 },
     body: { type: "string", optional: false, min: 5 },
-    image: { type: "string", optional: false, min: 5 },
-    author_id: { type: "number", optional: false },
   };
 
   const validation_response = v.validate(req.body, schema);
@@ -60,7 +58,10 @@ async function createBlog(req, res) {
     });
   }
 
-  const { title, body, image, author_id } = req.body;
+  const { title, body } = req.body;
+  const author_id = req.userData.user_id;
+  const image = "http://localhost:8000/blogimg/" + req.file.filename;
+
   const new_blog = { title, body, image, author_id };
 
   const response = await Blog.create(new_blog);
