@@ -20,7 +20,6 @@ async function getLatestBlogs(req, res) {
 }
 
 async function getBlogComments(req, res) {
-  console.log("hello");
   const { id } = req.params;
 
   const response = await BlogComment.findAll({
@@ -29,6 +28,21 @@ async function getBlogComments(req, res) {
   });
 
   res.send(response);
+}
+
+async function getBlogCommentsCount(req, res) {
+  const { id } = req.params;
+
+  const response = await BlogComment.findAll({
+    attributes: [
+      [Sequelize.fn("COUNT", Sequelize.col("id")), "comments_count"],
+    ],
+    where: { blog_id: id },
+  });
+
+  const comments_count = response[0];
+
+  res.send(comments_count);
 }
 
 async function getBlog(req, res) {
@@ -143,6 +157,7 @@ module.exports = {
   getBlogs,
   getLatestBlogs,
   getBlogComments,
+  getBlogCommentsCount,
   getBlog,
   createBlog,
   editBlog,
