@@ -114,7 +114,7 @@ async function addComment(req, res) {
   const v = new Validator();
   const schema = {
     body: { type: "string", optional: false, min: 1 },
-    blog_id: { type: "number", optional: false },
+    blog_id: { type: "string", optional: false },
   };
 
   const validation_response = v.validate(req.body, schema);
