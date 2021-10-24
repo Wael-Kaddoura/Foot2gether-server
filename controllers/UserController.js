@@ -271,7 +271,7 @@ async function getUser(req, res) {
 
   const response = await User.findOne({
     where: { id: id },
-    include: "fav_team",
+    include: { all: true },
   });
 
   res.send(response);
