@@ -95,10 +95,12 @@ async function signUp(req, res) {
 
   if (is_email_used) {
     res.status(409).json({
+      conflict: "Email",
       message: "Email already used!",
     });
   } else if (is_username_used) {
     res.status(409).json({
+      conflict: "Username",
       message: "Username already used!",
     });
   } else {
@@ -162,38 +164,6 @@ async function getFollowers(req, res) {
   });
 
   res.send(response);
-}
-
-async function followUser(req, res) {
-  const my_id = 1;
-  const { followed_user_id } = req.body;
-
-  const response = await UserFollower.create({
-    user_id: my_id,
-    following_id: followed_user_id,
-  });
-
-  res.send({
-    response: response,
-    message: "User Followed Successfully!",
-  });
-}
-
-async function unfollowUser(req, res) {
-  const my_id = 1;
-  const { followed_user_id } = req.body;
-
-  const response = await UserFollower.destroy({
-    where: {
-      user_id: my_id,
-      following_id: followed_user_id,
-    },
-  });
-
-  res.send({
-    response: response,
-    message: "User Unfollowed Successfully!",
-  });
 }
 
 async function getFollowingCount(req, res) {
@@ -275,6 +245,40 @@ async function getUser(req, res) {
   });
 
   res.send(response);
+}
+
+async function followUser(req, res) {
+  const id = req.userData.user_id;
+
+  const { followed_user_id } = req.body;
+
+  const response = await UserFollower.create({
+    user_id: id,
+    following_id: followed_user_id,
+  });
+
+  res.send({
+    response: response,
+    message: "User Followed Successfully!",
+  });
+}
+
+async function unfollowUser(req, res) {
+  const id = req.userData.user_id;
+
+  const { unfollowed_user_id } = req.body;
+
+  const response = await UserFollower.destroy({
+    where: {
+      user_id: id,
+      following_id: unfollowed_user_id,
+    },
+  });
+
+  res.send({
+    response: response,
+    message: "User Unfollowed Successfully!",
+  });
 }
 
 module.exports = {
