@@ -23,6 +23,7 @@ async function getMatch(req, res) {
 
 async function getLiveMatches(req, res) {
   const response = await Match.findAll({
+    order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
       match_day: current_date,
       kick_off: { [Op.lte]: current_time },
@@ -36,6 +37,7 @@ async function getLiveMatches(req, res) {
 
 async function getFinishedMatchesToday(req, res) {
   const response = await Match.findAll({
+    order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
       match_day: current_date,
       full_time: { [Op.lte]: current_time },
@@ -48,6 +50,7 @@ async function getFinishedMatchesToday(req, res) {
 
 async function getUpcomingMatchesToday(req, res) {
   const response = await Match.findAll({
+    order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
       match_day: current_date,
       kick_off: { [Op.gt]: current_time },
@@ -121,6 +124,7 @@ async function getNextMatch(req, res) {
 
 async function getAvailableMatches(req, res) {
   const response = await Match.findAll({
+    order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
       match_day: current_date,
       full_time: { [Op.gt]: current_time },
