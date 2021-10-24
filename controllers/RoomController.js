@@ -18,7 +18,7 @@ async function getRoomById(req, res) {
 async function getLiveRooms(req, res) {
   const response = await Room.findAll({
     order: [[Sequelize.col("current_participants_number"), "DESC"]],
-    include: ["matchroom", "creator"],
+    include: { all: true },
   });
 
   res.send(response);
@@ -49,12 +49,24 @@ async function getMatchRooms(req, res) {
 }
 
 async function getUserRooms(req, res) {
-  const { user_id } = req.body;
+  const { user_id } = req.params;
 
   const response = await Room.findAll({
     order: [[Sequelize.col("current_participants_number"), "DESC"]],
     where: { creator_id: user_id },
-    include: "match",
+    include: { all: true },
+  });
+
+  res.send(response);
+}
+
+async function getMyRooms(req, res) {
+  const user_id = req.userData.user_id;
+
+  const response = await Room.findAll({
+    order: [[Sequelize.col("current_participants_number"), "DESC"]],
+    where: { creator_id: user_id },
+    include: { all: true },
   });
 
   res.send(response);
@@ -106,5 +118,6 @@ module.exports = {
   getLiveRoomsCount,
   getMatchRooms,
   getUserRooms,
+  getMyRooms,
   createRoom,
 };
