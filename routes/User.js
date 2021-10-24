@@ -35,4 +35,6 @@ router.post(
   UserController.changeCoverPhoto
 );
 
+router.post("/change_bio", UserController.changeBio);
+
 module.exports = router;

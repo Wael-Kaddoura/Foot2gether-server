@@ -236,6 +236,21 @@ async function changeCoverPhoto(req, res) {
   res.send(response);
 }
 
+async function changeBio(req, res) {
+  const id = req.userData.user_id;
+  const { new_bio } = req.body;
+
+  const user = await User.findOne({
+    where: { id: id },
+  });
+
+  user.bio = new_bio;
+
+  const response = await user.save();
+
+  res.send(response);
+}
+
 async function getUser(req, res) {
   const { id } = req.params;
 
@@ -294,5 +309,6 @@ module.exports = {
   getMyProfile,
   changeProfilePicture,
   changeCoverPhoto,
+  changeBio,
   getUser,
 };
