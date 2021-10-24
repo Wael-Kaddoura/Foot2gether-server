@@ -67,6 +67,10 @@ module.exports = (sequelize, DataTypes) => {
       cover_photo: {
         type: Sequelize.STRING,
       },
+      bio: {
+        type: Sequelize.STRING,
+      },
+
       current_room_id: {
         allowNull: true,
         type: Sequelize.INTEGER,

@@ -48,6 +48,15 @@ module.exports = {
       user_type_id: {
         type: Sequelize.INTEGER,
       },
+      profile_picture: {
+        type: Sequelize.STRING,
+      },
+      cover_photo: {
+        type: Sequelize.STRING,
+      },
+      bio: {
+        type: Sequelize.STRING,
+      },
       current_room_id: {
         allowNull: true,
         type: Sequelize.INTEGER,

@@ -14,6 +14,7 @@ module.exports = {
           "http://localhost:8000/profile_picture/default_profile_picture.jpg",
         cover_photo:
           "http://localhost:8000/cover_photo/default_cover_photo.jpg",
+        bio: "Hala Madrid",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -28,6 +29,7 @@ module.exports = {
           "http://localhost:8000/profile_picture/default_profile_picture.jpg",
         cover_photo:
           "http://localhost:8000/cover_photo/default_cover_photo.jpg",
+        bio: "United is a life , the rest are mere details",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -42,6 +44,7 @@ module.exports = {
           "http://localhost:8000/profile_picture/default_profile_picture.jpg",
         cover_photo:
           "http://localhost:8000/cover_photo/default_cover_photo.jpg",
+        bio: "YNWA",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -56,6 +59,7 @@ module.exports = {
           "http://localhost:8000/profile_picture/default_profile_picture.jpg",
         cover_photo:
           "http://localhost:8000/cover_photo/default_cover_photo.jpg",
+        bio: "Mia san Mia",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
