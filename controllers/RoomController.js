@@ -17,6 +17,7 @@ async function getRoomById(req, res) {
 
 async function getLiveRooms(req, res) {
   const response = await Room.findAll({
+    order: [[Sequelize.col("current_participants_number"), "DESC"]],
     include: ["matchroom", "creator"],
   });
 
@@ -39,6 +40,7 @@ async function getMatchRooms(req, res) {
   const { match_id } = req.params;
 
   const response = await Room.findAll({
+    order: [[Sequelize.col("current_participants_number"), "DESC"]],
     where: { match_id: match_id },
     include: "creator",
   });
@@ -50,6 +52,7 @@ async function getUserRooms(req, res) {
   const { user_id } = req.body;
 
   const response = await Room.findAll({
+    order: [[Sequelize.col("current_participants_number"), "DESC"]],
     where: { creator_id: user_id },
     include: "match",
   });
