@@ -253,13 +253,23 @@ async function changeBio(req, res) {
 
 async function getUser(req, res) {
   const { id } = req.params;
+  const my_id = req.userData.user_id;
 
   const response = await User.findOne({
     where: { id: id },
     include: { all: true },
   });
 
-  res.send(response);
+  const check_if_followed = await UserFollower.findOne({
+    where: { user_id: my_id, following_id: id },
+  });
+
+  let is_followed = false;
+  if (check_if_followed) {
+    is_followed = true;
+  }
+
+  res.send({ user_data: response, is_followed });
 }
 
 async function followUser(req, res) {
