@@ -4,6 +4,8 @@ const checkAuthMiddleware = require("../middleware/check-auth");
 
 const router = express.Router();
 
+router.use(checkAuthMiddleware.checkAuth);
+
 router.get("/", TeamController.getAllTeam);
 router.get("/logo/:id", TeamController.getTeamLogo);
 
