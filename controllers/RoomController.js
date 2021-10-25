@@ -1,8 +1,13 @@
 const { Sequelize } = require("sequelize");
 const Op = Sequelize.Op;
+const date = require("date-and-time");
 const Validator = require("fastest-validator");
 
-const { Room } = require("../models");
+const { Room, Match } = require("../models");
+
+const current_date_time = new Date();
+const current_date = date.format(current_date_time, "YYYY-MM-DD");
+const current_time = date.format(current_date_time, "HH:mm:ss");
 
 async function getRoomById(req, res) {
   const { room_id } = req.params;
@@ -22,6 +27,32 @@ async function getLiveRooms(req, res) {
   });
 
   res.send(response);
+}
+
+async function checkIfLive(req, res) {
+  const { room_id } = req.params;
+
+  const live_matches = await Match.findAll({
+    order: [[Sequelize.col("kick_off"), "ASC"]],
+    where: {
+      match_day: current_date,
+      kick_off: { [Op.lte]: current_time },
+      full_time: { [Op.gte]: current_time },
+    },
+    include: "matchroom",
+  });
+
+  let live_rooms = [];
+  //extracting live rooms IDs
+  for (const match_id in live_matches) {
+    for (const live_room of live_matches[match_id].matchroom) {
+      live_rooms.push(live_room.id);
+    }
+  }
+
+  const is_live = live_rooms.includes(parseInt(room_id));
+
+  res.send(is_live);
 }
 
 async function getLiveRoomsCount(req, res) {
@@ -116,6 +147,7 @@ module.exports = {
   getRoomById,
   getLiveRooms,
   getLiveRoomsCount,
+  checkIfLive,
   getMatchRooms,
   getUserRooms,
   getMyRooms,

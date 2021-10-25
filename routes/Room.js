@@ -8,6 +8,7 @@ router.use(checkAuthMiddleware.checkAuth);
 
 router.get("/", RoomController.getLiveRooms);
 router.get("/count", RoomController.getLiveRoomsCount);
+router.get("/check_if_live/:room_id", RoomController.checkIfLive);
 router.get("/match/:match_id", RoomController.getMatchRooms);
 router.get("/user/:user_id", RoomController.getUserRooms);
 router.get("/my_rooms", RoomController.getMyRooms);
