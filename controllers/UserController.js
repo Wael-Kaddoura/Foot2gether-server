@@ -289,6 +289,37 @@ async function getUser(req, res) {
   res.send({ user_data: response, is_followed });
 }
 
+async function userTypeCheck(user_id) {
+  //getting followers count
+  const followed_user_info = await UserFollower.findAll({
+    attributes: [
+      [Sequelize.fn("COUNT", Sequelize.col("id")), "followers_count"],
+    ],
+    where: { following_id: user_id },
+  });
+
+  const followers_count = followed_user_info[0].dataValues.followers_count;
+
+  //changing user type depending on followers count
+  if (followers_count >= 5) {
+    const user = await User.findOne({
+      where: { id: user_id },
+    });
+
+    user.user_type_id = 2;
+
+    await user.save();
+  } else {
+    const user = await User.findOne({
+      where: { id: user_id },
+    });
+
+    user.user_type_id = 1;
+
+    await user.save();
+  }
+}
+
 async function followUser(req, res) {
   const id = req.userData.user_id;
 
@@ -298,6 +329,9 @@ async function followUser(req, res) {
     user_id: id,
     following_id: followed_user_id,
   });
+
+  //checking user type based on followers count
+  await userTypeCheck(followed_user_id);
 
   res.send({
     response: response,
@@ -316,6 +350,9 @@ async function unfollowUser(req, res) {
       following_id: unfollowed_user_id,
     },
   });
+
+  //checking user type based on followers count
+  await userTypeCheck(unfollowed_user_id);
 
   res.send({
     response: response,

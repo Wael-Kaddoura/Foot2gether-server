@@ -149,7 +149,9 @@ async function createRoom(req, res, next) {
       attributes: ["notification_token"],
     });
 
-    followers_tokens.push(follower_token.notification_token);
+    if (follower_token.notification_token) {
+      followers_tokens.push(follower_token.notification_token);
+    }
   }
 
   const notification_info = {
