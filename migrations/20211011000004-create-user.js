@@ -57,6 +57,10 @@ module.exports = {
       bio: {
         type: Sequelize.STRING,
       },
+      notification_token: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
       current_room_id: {
         allowNull: true,
         type: Sequelize.INTEGER,

@@ -70,7 +70,9 @@ module.exports = (sequelize, DataTypes) => {
       bio: {
         type: Sequelize.STRING,
       },
-
+      notification_token: {
+        type: Sequelize.STRING,
+      },
       current_room_id: {
         allowNull: true,
         type: Sequelize.INTEGER,
