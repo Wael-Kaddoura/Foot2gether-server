@@ -208,6 +208,22 @@ async function getMyProfile(req, res) {
   res.send(response);
 }
 
+async function saveNotificationToken(req, res) {
+  const id = req.userData.user_id;
+
+  const { notification_token } = req.body;
+
+  const user = await User.findOne({
+    where: { id: id },
+  });
+
+  user.notification_token = notification_token;
+
+  const response = await user.save();
+
+  res.send(response);
+}
+
 async function changeProfilePicture(req, res) {
   const id = req.userData.user_id;
 
@@ -315,6 +331,7 @@ module.exports = {
   getFollowers,
   followUser,
   unfollowUser,
+  saveNotificationToken,
   getFollowingCount,
   getFollowersCount,
   getMyProfile,

@@ -23,6 +23,8 @@ router.get("/search/:username", UserController.searchUsersByUsername);
 router.post("/follow", UserController.followUser);
 router.post("/unfollow", UserController.unfollowUser);
 
+router.post("/save_notification_token", UserController.saveNotificationToken);
+
 router.post(
   "/change_profile_picture",
   ProfilePictureUploader.upload.single("image"),
