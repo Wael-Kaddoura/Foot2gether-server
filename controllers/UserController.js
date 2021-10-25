@@ -139,6 +139,7 @@ async function searchUsersByUsername(req, res) {
 
   const response = await User.findAll({
     where: { username: { [Op.like]: "%" + username + "%" } },
+    include: { all: true },
   });
 
   res.send(response);

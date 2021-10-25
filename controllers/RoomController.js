@@ -9,7 +9,7 @@ async function getRoomById(req, res) {
 
   const response = await Room.findOne({
     where: { id: room_id },
-    include: "creator",
+    include: { all: true },
   });
 
   res.send(response);
