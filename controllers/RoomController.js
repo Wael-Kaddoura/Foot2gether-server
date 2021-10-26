@@ -127,6 +127,7 @@ async function createRoom(req, res, next) {
     match_id,
     creator_id,
     name,
+    current_participants_number: 0,
   };
 
   const match_info = await Match.findOne({

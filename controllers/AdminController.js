@@ -149,10 +149,46 @@ async function createNewMatch(req, res) {
   }
 }
 
+async function createNewRoom(req, res) {
+  const v = new Validator();
+  const schema = {
+    match_id: { type: "string", optional: false },
+    name: { type: "string", optional: false },
+  };
+
+  const validation_response = v.validate(req.body, schema);
+
+  if (validation_response !== true) {
+    return res.status(400).json({
+      message: "Validation Failed!",
+      errors: validation_response,
+    });
+  }
+
+  const { match_id, name } = req.body;
+  const new_room = {
+    match_id,
+    creator_id: 1,
+    name,
+    current_participants_number: 0,
+  };
+
+  try {
+    const response = await Room.create(new_room);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
+}
+
 module.exports = {
   getCardsCount,
   getAllMatches,
   getTodaysMatches,
   getTodaysRooms,
   createNewMatch,
+  createNewRoom,
 };

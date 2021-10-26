@@ -9,5 +9,6 @@ router.get("/match/today", AdminController.getTodaysMatches);
 router.get("/room/today", AdminController.getTodaysRooms);
 
 router.post("/match", AdminController.createNewMatch);
+router.post("/room", AdminController.createNewRoom);
 
 module.exports = router;
