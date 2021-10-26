@@ -56,7 +56,26 @@ async function getCardsCount(req, res) {
 }
 
 async function getAllMatches(req, res) {
-  const response = await Match.findAll({});
+  const response = await Match.findAll({
+    order: [
+      [Sequelize.col("match_day"), "ASC"],
+      [Sequelize.col("kick_off"), "ASC"],
+    ],
+  });
+
+  res.send(response);
+}
+
+async function getTodaysMatches(req, res) {
+  const response = await Match.findAll({
+    order: [
+      [Sequelize.col("match_day"), "ASC"],
+      [Sequelize.col("kick_off"), "ASC"],
+    ],
+    where: {
+      match_day: current_date,
+    },
+  });
 
   res.send(response);
 }
@@ -64,4 +83,5 @@ async function getAllMatches(req, res) {
 module.exports = {
   getCardsCount,
   getAllMatches,
+  getTodaysMatches,
 };
