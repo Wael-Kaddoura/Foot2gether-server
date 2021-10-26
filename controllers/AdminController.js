@@ -184,6 +184,37 @@ async function createNewRoom(req, res) {
   }
 }
 
+async function changeMatchScore(req, res) {
+  const v = new Validator();
+  const schema = {
+    match_id: { type: "string", optional: false },
+    team1_score: { type: "string", optional: false },
+    team2_score: { type: "string", optional: false },
+  };
+
+  const validation_response = v.validate(req.body, schema);
+
+  if (validation_response !== true) {
+    return res.status(400).json({
+      message: "Validation Failed!",
+      errors: validation_response,
+    });
+  }
+
+  const { match_id, team1_score, team2_score } = req.body;
+
+  const match = await Match.findOne({
+    where: { id: match_id },
+  });
+
+  match.team1_score = team1_score;
+  match.team2_score = team2_score;
+
+  const response = await match.save();
+
+  res.send(response);
+}
+
 module.exports = {
   getCardsCount,
   getAllMatches,
@@ -191,4 +222,5 @@ module.exports = {
   getTodaysRooms,
   createNewMatch,
   createNewRoom,
+  changeMatchScore,
 };

@@ -11,4 +11,6 @@ router.get("/room/today", AdminController.getTodaysRooms);
 router.post("/match", AdminController.createNewMatch);
 router.post("/room", AdminController.createNewRoom);
 
+router.put("/match_score", AdminController.changeMatchScore);
+
 module.exports = router;
