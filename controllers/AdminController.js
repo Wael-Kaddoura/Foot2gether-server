@@ -95,9 +95,64 @@ async function getTodaysRooms(req, res) {
   res.send(response);
 }
 
+async function createNewMatch(req, res) {
+  const v = new Validator();
+  const schema = {
+    match_day: { type: "string", optional: false },
+    kick_off: { type: "string", optional: false },
+    full_time: { type: "string", optional: false },
+    competition_id: { type: "string", optional: false },
+    stadium: { type: "string", optional: false },
+    team1_id: { type: "string", optional: false },
+    team2_id: { type: "string", optional: false },
+  };
+
+  const validation_response = v.validate(req.body, schema);
+
+  if (validation_response !== true) {
+    return res.status(400).json({
+      message: "Validation Failed!",
+      errors: validation_response,
+    });
+  }
+
+  const {
+    match_day,
+    kick_off,
+    full_time,
+    competition_id,
+    stadium,
+    team1_id,
+    team2_id,
+  } = req.body;
+
+  const new_match = {
+    match_day,
+    kick_off,
+    full_time,
+    competition_id,
+    stadium,
+    team1_id,
+    team2_id,
+    team1_score: 0,
+    team2_score: 0,
+  };
+
+  try {
+    const response = await Match.create(new_match);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
+}
+
 module.exports = {
   getCardsCount,
   getAllMatches,
   getTodaysMatches,
   getTodaysRooms,
+  createNewMatch,
 };
