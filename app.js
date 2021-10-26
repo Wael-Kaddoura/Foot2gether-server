@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const port = process.env.PORT || 8000;
 
+const adminRoute = require("./routes/Admin");
 const userRoute = require("./routes/User");
 const matchRoute = require("./routes/Match");
 const roomRoute = require("./routes/Room");
@@ -24,6 +25,7 @@ app.use("/blogimg", express.static("images/blogs"));
 app.use("/profile_picture", express.static("images/profile_pictures"));
 app.use("/cover_photo", express.static("images/cover_photos"));
 
+app.use("/admin", adminRoute);
 app.use("/user", userRoute);
 app.use("/match", matchRoute);
 app.use("/room", roomRoute);
