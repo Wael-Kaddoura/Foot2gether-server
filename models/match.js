@@ -39,6 +39,9 @@ module.exports = (sequelize, DataTypes) => {
       competition_id: {
         type: Sequelize.INTEGER,
       },
+      stadium: {
+        type: Sequelize.STRING,
+      },
       team1_id: {
         type: Sequelize.INTEGER,
       },

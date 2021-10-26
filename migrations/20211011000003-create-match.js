@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       stadium: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       team1_id: {
         type: Sequelize.INTEGER,
