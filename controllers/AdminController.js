@@ -55,6 +55,13 @@ async function getCardsCount(req, res) {
   res.send(cards_count);
 }
 
+async function getAllMatches(req, res) {
+  const response = await Match.findAll({});
+
+  res.send(response);
+}
+
 module.exports = {
   getCardsCount,
+  getAllMatches,
 };
