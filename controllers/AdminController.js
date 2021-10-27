@@ -3,7 +3,7 @@ const Op = Sequelize.Op;
 const date = require("date-and-time");
 const Validator = require("fastest-validator");
 
-const { Room, Match } = require("../models");
+const { Room, Match, Competition, Team, User } = require("../models");
 
 const current_date_time = new Date();
 const current_date = date.format(current_date_time, "YYYY-MM-DD");
@@ -61,6 +61,7 @@ async function getAllMatches(req, res) {
       [Sequelize.col("match_day"), "DESC"],
       [Sequelize.col("kick_off"), "ASC"],
     ],
+    include: { all: true },
   });
 
   res.send(response);
@@ -72,6 +73,7 @@ async function getTodaysMatches(req, res) {
     where: {
       match_day: current_date,
     },
+    include: { all: true },
   });
 
   res.send(response);
@@ -79,7 +81,10 @@ async function getTodaysMatches(req, res) {
 
 async function getTodaysRooms(req, res) {
   const response = await Room.findAll({
-    order: [[Sequelize.col("matchroom.kick_off"), "DESC"]],
+    order: [
+      [Sequelize.col("matchroom.kick_off"), "DESC"],
+      [Sequelize.col("match_id")],
+    ],
 
     include: [
       {
@@ -88,11 +93,37 @@ async function getTodaysRooms(req, res) {
         where: {
           match_day: current_date,
         },
+        include: ["team1", "team2"],
+      },
+      {
+        model: User,
+        as: "creator",
       },
     ],
   });
 
   res.send(response);
+}
+
+async function getAvailableMatches(req, res) {
+  const response = await Match.findAll({
+    order: [[Sequelize.col("kick_off"), "ASC"]],
+    where: {
+      match_day: current_date,
+      full_time: { [Op.gt]: current_time },
+    },
+    order: [[Sequelize.col("kick_off"), "ASC"]],
+    include: ["team1", "team2"],
+  });
+
+  res.send(response);
+}
+
+async function getCreateMatchOptions(req, res) {
+  const competitions = await Competition.findAll({});
+  const teams = await Team.findAll({});
+
+  res.send({ competitions: competitions, teams: teams });
 }
 
 async function createNewMatch(req, res) {
@@ -101,10 +132,10 @@ async function createNewMatch(req, res) {
     match_day: { type: "string", optional: false },
     kick_off: { type: "string", optional: false },
     full_time: { type: "string", optional: false },
-    competition_id: { type: "string", optional: false },
+    competition_id: { type: "number", optional: false },
     stadium: { type: "string", optional: false },
-    team1_id: { type: "string", optional: false },
-    team2_id: { type: "string", optional: false },
+    team1_id: { type: "number", optional: false },
+    team2_id: { type: "number", optional: false },
   };
 
   const validation_response = v.validate(req.body, schema);
@@ -187,9 +218,9 @@ async function createNewRoom(req, res) {
 async function changeMatchScore(req, res) {
   const v = new Validator();
   const schema = {
-    match_id: { type: "string", optional: false },
-    team1_score: { type: "string", optional: false },
-    team2_score: { type: "string", optional: false },
+    match_id: { type: "number", optional: false },
+    team1_score: { type: "number", optional: false },
+    team2_score: { type: "number", optional: false },
   };
 
   const validation_response = v.validate(req.body, schema);
@@ -220,6 +251,8 @@ module.exports = {
   getAllMatches,
   getTodaysMatches,
   getTodaysRooms,
+  getCreateMatchOptions,
+  getAvailableMatches,
   createNewMatch,
   createNewRoom,
   changeMatchScore,
