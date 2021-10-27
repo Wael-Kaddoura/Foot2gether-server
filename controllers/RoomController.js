@@ -23,8 +23,27 @@ async function getRoomById(req, res) {
 
 async function getLiveRooms(req, res) {
   const response = await Room.findAll({
-    order: [[Sequelize.col("current_participants_number"), "DESC"]],
-    include: { all: true },
+    order: [
+      [Sequelize.col("current_participants_number"), "DESC"],
+      [Sequelize.col("matchroom.kick_off"), "ASC"],
+    ],
+
+    include: [
+      {
+        model: Match,
+        as: "matchroom",
+        where: {
+          match_day: current_date,
+          kick_off: { [Op.lte]: current_time },
+          full_time: { [Op.gte]: current_time },
+        },
+        include: ["team1", "team2"],
+      },
+      {
+        model: User,
+        as: "creator",
+      },
+    ],
   });
 
   res.send(response);
