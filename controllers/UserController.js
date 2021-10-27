@@ -138,6 +138,17 @@ async function signUp(req, res) {
   }
 }
 
+async function getUserType(req, res) {
+  const user_id = req.userData.user_id;
+
+  const response = await User.findOne({
+    where: { id: user_id },
+    attributes: ["user_type_id"],
+  });
+
+  res.send(response);
+}
+
 async function searchUsersByUsername(req, res) {
   const { username } = req.params;
 
@@ -367,6 +378,7 @@ async function unfollowUser(req, res) {
 module.exports = {
   login,
   signUp,
+  getUserType,
   searchUsersByUsername,
   getFollowing,
   getFollowers,

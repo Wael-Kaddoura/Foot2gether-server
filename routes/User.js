@@ -11,6 +11,7 @@ router.post("/login", UserController.login);
 
 router.use(checkAuthMiddleware.checkAuth);
 
+router.get("/type", UserController.getUserType);
 router.get("/following", UserController.getFollowing);
 router.get("/followers", UserController.getFollowers);
 router.get("/following_count", UserController.getFollowingCount);
