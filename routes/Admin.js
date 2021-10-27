@@ -1,7 +1,10 @@
 const express = require("express");
 const AdminController = require("../controllers/AdminController");
+const checkAuthMiddleware = require("../middleware/check-auth");
 
 const router = express.Router();
+
+router.use(checkAuthMiddleware.checkAuthAdmin);
 
 router.get("/cards_count", AdminController.getCardsCount);
 router.get("/match/all", AdminController.getAllMatches);
