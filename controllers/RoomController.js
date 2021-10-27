@@ -15,7 +15,18 @@ async function getRoomById(req, res) {
 
   const response = await Room.findOne({
     where: { id: room_id },
-    include: { all: true },
+
+    include: [
+      {
+        model: Match,
+        as: "matchroom",
+        include: ["team1", "team2"],
+      },
+      {
+        model: User,
+        as: "creator",
+      },
+    ],
   });
 
   res.send(response);
@@ -105,7 +116,22 @@ async function getUserRooms(req, res) {
   const response = await Room.findAll({
     order: [[Sequelize.col("current_participants_number"), "DESC"]],
     where: { creator_id: user_id },
-    include: { all: true },
+    include: [
+      {
+        model: Match,
+        as: "matchroom",
+        where: {
+          match_day: current_date,
+          kick_off: { [Op.lte]: current_time },
+          full_time: { [Op.gte]: current_time },
+        },
+        include: ["team1", "team2"],
+      },
+      {
+        model: User,
+        as: "creator",
+      },
+    ],
   });
 
   res.send(response);
@@ -117,7 +143,22 @@ async function getMyRooms(req, res) {
   const response = await Room.findAll({
     order: [[Sequelize.col("current_participants_number"), "DESC"]],
     where: { creator_id: user_id },
-    include: { all: true },
+    include: [
+      {
+        model: Match,
+        as: "matchroom",
+        where: {
+          match_day: current_date,
+          kick_off: { [Op.lte]: current_time },
+          full_time: { [Op.gte]: current_time },
+        },
+        include: ["team1", "team2"],
+      },
+      {
+        model: User,
+        as: "creator",
+      },
+    ],
   });
 
   res.send(response);
