@@ -34,15 +34,19 @@ async function login(req, res) {
     } else {
       bcryptjs.compare(password, user.password, (err, result) => {
         if (result) {
+          const is_admin = user.user_type_id == 3 ? true : false;
+
           const token = JWT.sign(
             {
               user_id: user.id,
+              user_type: user.user_type_id,
             },
             process.env.JWT_KEY,
             (err, token) => {
               return res.json({
                 message: "Authentication Successful!",
                 token: token,
+                isAdmin: is_admin,
               });
             }
           );
