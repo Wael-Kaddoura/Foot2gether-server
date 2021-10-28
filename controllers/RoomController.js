@@ -63,27 +63,28 @@ async function getLiveRooms(req, res) {
 async function checkIfLive(req, res) {
   const { room_id } = req.params;
 
-  const live_matches = await Match.findAll({
-    order: [[Sequelize.col("kick_off"), "ASC"]],
-    where: {
-      match_day: current_date,
-      kick_off: { [Op.lte]: current_time },
-      full_time: { [Op.gte]: current_time },
-    },
-    include: "matchroom",
+  const room = await Room.findOne({
+    where: { id: room_id },
+    include: [
+      {
+        model: Match,
+        as: "matchroom",
+        where: {
+          match_day: current_date,
+          kick_off: { [Op.lte]: current_time },
+          full_time: { [Op.gte]: current_time },
+        },
+      },
+    ],
   });
 
-  let live_rooms = [];
-  //extracting live rooms IDs
-  for (const match_id in live_matches) {
-    for (const live_room of live_matches[match_id].matchroom) {
-      live_rooms.push(live_room.id);
-    }
+  let is_live_room = false;
+
+  if (room) {
+    is_live_room = true;
   }
 
-  const is_live = live_rooms.includes(parseInt(room_id));
-
-  res.send(is_live);
+  res.send(is_live_room);
 }
 
 async function getLiveRoomsCount(req, res) {
