@@ -48,6 +48,7 @@ async function login(req, res) {
                 token: token,
                 isAdmin: is_admin,
                 user: {
+                  id: user.id,
                   username: user.username,
                   userProfilePicture: user.profile_picture,
                 },
