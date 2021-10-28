@@ -40,4 +40,9 @@ router.post(
 
 router.post("/change_bio", UserController.changeBio);
 
+router.delete(
+  "/clear_notification_token",
+  UserController.clearNotificationToken
+);
+
 module.exports = router;

@@ -47,6 +47,10 @@ async function login(req, res) {
                 message: "Authentication Successful!",
                 token: token,
                 isAdmin: is_admin,
+                user: {
+                  username: user.username,
+                  userProfilePicture: user.profile_picture,
+                },
               });
             }
           );
@@ -239,6 +243,20 @@ async function saveNotificationToken(req, res) {
   res.send(response);
 }
 
+async function clearNotificationToken(req, res) {
+  const id = req.userData.user_id;
+
+  const user = await User.findOne({
+    where: { id: id },
+  });
+
+  user.notification_token = "";
+
+  const response = await user.save();
+
+  res.send(response);
+}
+
 async function changeProfilePicture(req, res) {
   const id = req.userData.user_id;
 
@@ -385,6 +403,7 @@ module.exports = {
   followUser,
   unfollowUser,
   saveNotificationToken,
+  clearNotificationToken,
   getFollowingCount,
   getFollowersCount,
   getMyProfile,
