@@ -160,8 +160,9 @@ async function searchUsersByUsername(req, res) {
   const { username } = req.params;
 
   const response = await User.findAll({
+    attributes: ["username", "profile_picture"],
     where: { username: { [Op.like]: "%" + username + "%" } },
-    include: { all: true },
+    include: ["fav_team", "follower"],
   });
 
   res.send(response);
@@ -223,8 +224,9 @@ async function getMyProfile(req, res) {
   const id = req.userData.user_id;
 
   const response = await User.findOne({
+    attributes: ["id", "username"],
     where: { id: id },
-    include: { all: true },
+    include: ["fav_team", "follower", "following"],
   });
 
   res.send(response);
@@ -309,8 +311,9 @@ async function getUser(req, res) {
   const my_id = req.userData.user_id;
 
   const response = await User.findOne({
+    attributes: ["id", "username", "profile_picture", "cover_photo", "bio"],
     where: { id: id },
-    include: { all: true },
+    include: ["fav_team", "follower", "following"],
   });
 
   const check_if_followed = await UserFollower.findOne({
