@@ -48,9 +48,11 @@ async function login(req, res) {
                 token: token,
                 isAdmin: is_admin,
                 user: {
-                  id: user.id,
+                  user_id: user.id,
                   username: user.username,
-                  userProfilePicture: user.profile_picture,
+                  user_profile_picture: user.profile_picture,
+                  user_cover_photo: user.cover_photo,
+                  user_bio: user.bio,
                 },
               });
             }
@@ -270,7 +272,7 @@ async function changeProfilePicture(req, res) {
 
   const response = await user.save();
 
-  res.send(response);
+  res.send(response.profile_picture);
 }
 
 async function changeCoverPhoto(req, res) {
@@ -284,7 +286,7 @@ async function changeCoverPhoto(req, res) {
 
   const response = await user.save();
 
-  res.send(response);
+  res.send(response.cover_photo);
 }
 
 async function changeBio(req, res) {
@@ -299,7 +301,7 @@ async function changeBio(req, res) {
 
   const response = await user.save();
 
-  res.send(response);
+  res.send(response.bio);
 }
 
 async function getUser(req, res) {
