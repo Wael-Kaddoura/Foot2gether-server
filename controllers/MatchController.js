@@ -61,53 +61,6 @@ async function getUpcomingMatchesToday(req, res) {
   res.send(response);
 }
 
-async function getLiveMatchesCount(req, res) {
-  const response = await Match.findAll({
-    attributes: [[Sequelize.fn("COUNT", Sequelize.col("id")), "live_count"]],
-    where: {
-      match_day: current_date,
-      kick_off: { [Op.lte]: current_time },
-      full_time: { [Op.gte]: current_time },
-    },
-  });
-
-  const live_count = response[0];
-
-  res.send(live_count);
-}
-
-async function getFinishedMatchesTodayCount(req, res) {
-  const response = await Match.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("id")), "finished_count"],
-    ],
-    where: {
-      match_day: current_date,
-      full_time: { [Op.lte]: current_time },
-    },
-  });
-
-  const finished_count = response[0];
-
-  res.send(finished_count);
-}
-
-async function getUpcomingMatchesTodayCount(req, res) {
-  const response = await Match.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("id")), "upcoming_count"],
-    ],
-    where: {
-      match_day: current_date,
-      kick_off: { [Op.gt]: current_time },
-    },
-  });
-
-  const upcoming_count = response[0];
-
-  res.send(upcoming_count);
-}
-
 async function getNextMatch(req, res) {
   const response = await Match.findAll({
     where: {
@@ -123,17 +76,26 @@ async function getNextMatch(req, res) {
 }
 
 async function getAvailableMatches(req, res) {
-  const response = await Match.findAll({
+  const live_matches = await Match.findAll({
     order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
       match_day: current_date,
-      full_time: { [Op.gt]: current_time },
+      kick_off: { [Op.lte]: current_time },
+      full_time: { [Op.gte]: current_time },
     },
+    include: ["team1", "team2"],
+  });
+
+  const upcoming_matches = await Match.findAll({
     order: [[Sequelize.col("kick_off"), "ASC"]],
+    where: {
+      match_day: current_date,
+      kick_off: { [Op.gt]: current_time },
+    },
     include: { all: true },
   });
 
-  res.send(response);
+  res.send({ live_matches, upcoming_matches });
 }
 
 module.exports = {
@@ -141,10 +103,6 @@ module.exports = {
   getLiveMatches,
   getFinishedMatchesToday,
   getUpcomingMatchesToday,
-  getLiveMatchesCount,
-  getFinishedMatchesTodayCount,
-  getUpcomingMatchesTodayCount,
-  getUpcomingMatchesTodayCount,
   getNextMatch,
   getAvailableMatches,
 };
