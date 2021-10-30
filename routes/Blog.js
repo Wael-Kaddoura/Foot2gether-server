@@ -10,6 +10,7 @@ router.get("/latest", BlogController.getLatestBlogs);
 router.use(checkAuthMiddleware.checkAuth);
 
 router.get("/", BlogController.getBlogs);
+router.get("/my_blogs", BlogController.getMyBlogs);
 router.get("/user/:user_id", BlogController.getUserBlogs);
 router.get("/comments/:id", BlogController.getBlogComments);
 router.get("/comments_count/:id", BlogController.getBlogCommentsCount);
