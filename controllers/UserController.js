@@ -5,6 +5,7 @@ const bcryptjs = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 
 const { User, UserFollower } = require("../models");
+const { map } = require("lodash");
 
 async function login(req, res) {
   const v = new Validator();
@@ -157,12 +158,23 @@ async function getUserType(req, res) {
 }
 
 async function searchUsersByUsername(req, res) {
+  const my_id = req.userData.user_id;
   const { username } = req.params;
 
   const response = await User.findAll({
-    attributes: ["username", "profile_picture"],
+    attributes: ["id", "username", "profile_picture"],
     where: { username: { [Op.like]: "%" + username + "%" } },
     include: ["fav_team", "follower"],
+  });
+
+  response.forEach((user) => {
+    user.dataValues.is_followed = false;
+    for (const follower of user.dataValues.follower) {
+      if (follower.user_id == my_id) {
+        user.dataValues.is_followed = true;
+        break;
+      }
+    }
   });
 
   res.send(response);
