@@ -2,7 +2,7 @@ const { Sequelize } = require("sequelize");
 const Op = Sequelize.Op;
 const date = require("date-and-time");
 
-const { Match } = require("../models");
+const { Match, Room } = require("../models");
 
 function getCurrentTime() {
   const current_time = date.format(new Date(), "HH:mm:ss");
@@ -23,7 +23,16 @@ async function getMatch(req, res) {
     where: {
       id: id,
     },
-    include: { all: true },
+    include: [
+      "competition",
+      "team1",
+      "team2",
+      {
+        model: Room,
+        as: "matchroom",
+        include: ["creator"],
+      },
+    ],
   });
 
   res.send(response);
