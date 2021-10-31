@@ -8,15 +8,19 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       title: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       body: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       image: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       author_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       createdAt: {

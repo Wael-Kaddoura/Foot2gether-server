@@ -218,7 +218,6 @@ async function createNewRoom(req, res) {
     match_id,
     creator_id: 1,
     name,
-    current_participants_number: 0,
   };
 
   try {

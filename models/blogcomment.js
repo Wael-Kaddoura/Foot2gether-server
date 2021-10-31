@@ -17,12 +17,15 @@ module.exports = (sequelize, DataTypes) => {
   BlogComment.init(
     {
       body: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       author_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       blog_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
     },

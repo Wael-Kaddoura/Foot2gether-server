@@ -13,9 +13,11 @@ module.exports = (sequelize, DataTypes) => {
   Competition.init(
     {
       name: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       region: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
     },

@@ -2,11 +2,6 @@ const { Sequelize, DataTypes, Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       this.hasMany(models.UserFollower, {
         as: "follower",
@@ -42,40 +37,46 @@ module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       username: {
+        allowNull: false,
         unique: true,
         type: Sequelize.STRING,
       },
       email: {
+        allowNull: false,
         unique: true,
         type: Sequelize.STRING,
       },
       password: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       gender: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       fav_team_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       user_type_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       profile_picture: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       cover_photo: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       bio: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       notification_token: {
-        type: Sequelize.STRING,
-      },
-      current_room_id: {
         allowNull: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
     },
     {

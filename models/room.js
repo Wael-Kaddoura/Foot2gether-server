@@ -17,20 +17,16 @@ module.exports = (sequelize, DataTypes) => {
   Room.init(
     {
       match_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       creator_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       name: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING,
-      },
-      current_participants_number: {
-        type: Sequelize.INTEGER,
-      },
-      max_capacity: {
-        type: Sequelize.INTEGER,
       },
     },
     {

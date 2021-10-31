@@ -23,12 +23,15 @@ module.exports = (sequelize, DataTypes) => {
   Team.init(
     {
       name: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       country: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       logo: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
     },

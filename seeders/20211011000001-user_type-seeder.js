@@ -13,6 +13,11 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        user_type: "Admin",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

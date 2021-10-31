@@ -45,10 +45,7 @@ async function getLiveRooms(req, res) {
   const current_time = getCurrentTime();
 
   const response = await Room.findAll({
-    order: [
-      [Sequelize.col("current_participants_number"), "DESC"],
-      [Sequelize.col("matchroom.kick_off"), "ASC"],
-    ],
+    order: [[Sequelize.col("matchroom.kick_off"), "ASC"]],
 
     include: [
       {
@@ -117,7 +114,6 @@ async function getMatchRooms(req, res) {
   const { match_id } = req.params;
 
   const response = await Room.findAll({
-    order: [[Sequelize.col("current_participants_number"), "DESC"]],
     where: { match_id: match_id },
     include: "creator",
   });
@@ -132,7 +128,6 @@ async function getUserRooms(req, res) {
   const { user_id } = req.params;
 
   const response = await Room.findAll({
-    order: [[Sequelize.col("current_participants_number"), "DESC"]],
     where: { creator_id: user_id },
     include: [
       {
@@ -162,7 +157,6 @@ async function getMyRooms(req, res) {
   const user_id = req.userData.user_id;
 
   const response = await Room.findAll({
-    order: [[Sequelize.col("current_participants_number"), "DESC"]],
     where: { creator_id: user_id },
     include: [
       {
@@ -208,7 +202,6 @@ async function createRoom(req, res, next) {
     match_id,
     creator_id,
     name,
-    current_participants_number: 0,
   };
 
   const match_info = await Match.findOne({

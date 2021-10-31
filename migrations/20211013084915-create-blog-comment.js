@@ -8,12 +8,15 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       body: {
+        allowNull: false,
         type: Sequelize.STRING,
       },
       author_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       blog_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       createdAt: {
