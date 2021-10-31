@@ -10,13 +10,15 @@ async function getTeamLogo(req, res) {
   res.send(response);
 }
 
-async function getAllTeam(req, res) {
-  const response = await Team.findAll({});
+async function getTopTeams(req, res) {
+  const response = await Team.findAll({
+    limit: 16,
+  });
 
   res.send(response);
 }
 
 module.exports = {
   getTeamLogo,
-  getAllTeam,
+  getTopTeams,
 };
