@@ -4,9 +4,17 @@ const date = require("date-and-time");
 
 const { Match } = require("../models");
 
-const current_date_time = new Date();
-const current_date = date.format(current_date_time, "YYYY-MM-DD");
-const current_time = date.format(current_date_time, "HH:mm:ss");
+function getCurrentTime() {
+  const current_time = date.format(new Date(), "HH:mm:ss");
+
+  return current_time;
+}
+
+function getCurrentDate(params) {
+  const current_date = date.format(new Date(), "YYYY-MM-DD");
+
+  return current_date;
+}
 
 async function getMatch(req, res) {
   const { id } = req.params;
@@ -22,6 +30,9 @@ async function getMatch(req, res) {
 }
 
 async function getLiveMatches(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const response = await Match.findAll({
     order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
@@ -36,6 +47,9 @@ async function getLiveMatches(req, res) {
 }
 
 async function getFinishedMatchesToday(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const response = await Match.findAll({
     order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
@@ -49,6 +63,9 @@ async function getFinishedMatchesToday(req, res) {
 }
 
 async function getUpcomingMatchesToday(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const response = await Match.findAll({
     order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
@@ -62,6 +79,9 @@ async function getUpcomingMatchesToday(req, res) {
 }
 
 async function getNextMatch(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const response = await Match.findAll({
     where: {
       match_day: current_date,
@@ -76,6 +96,9 @@ async function getNextMatch(req, res) {
 }
 
 async function getAvailableMatches(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const live_matches = await Match.findAll({
     order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {

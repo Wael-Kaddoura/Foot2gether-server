@@ -5,11 +5,21 @@ const Validator = require("fastest-validator");
 
 const { Room, Match, Competition, Team, User } = require("../models");
 
-const current_date_time = new Date();
-const current_date = date.format(current_date_time, "YYYY-MM-DD");
-const current_time = date.format(current_date_time, "HH:mm:ss");
+function getCurrentTime() {
+  const current_time = date.format(new Date(), "HH:mm:ss");
+
+  return current_time;
+}
+
+function getCurrentDate(params) {
+  const current_date = date.format(new Date(), "YYYY-MM-DD");
+
+  return current_date;
+}
 
 async function getCardsCount(req, res) {
+  const current_date = getCurrentDate();
+
   //get total matches count
   const total_matches_data = await Match.findAll({
     attributes: [
@@ -68,6 +78,8 @@ async function getAllMatches(req, res) {
 }
 
 async function getTodaysMatches(req, res) {
+  const current_date = getCurrentDate();
+
   const response = await Match.findAll({
     order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {
@@ -80,6 +92,8 @@ async function getTodaysMatches(req, res) {
 }
 
 async function getTodaysRooms(req, res) {
+  const current_date = getCurrentDate();
+
   const response = await Room.findAll({
     order: [
       [Sequelize.col("matchroom.kick_off"), "DESC"],
@@ -106,6 +120,9 @@ async function getTodaysRooms(req, res) {
 }
 
 async function getAvailableMatches(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const response = await Match.findAll({
     order: [[Sequelize.col("kick_off"), "ASC"]],
     where: {

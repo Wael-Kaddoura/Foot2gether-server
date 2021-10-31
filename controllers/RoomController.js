@@ -6,9 +6,17 @@ const Validator = require("fastest-validator");
 const { Room, Match, User } = require("../models");
 const FCMController = require("./FCMController");
 
-const current_date_time = new Date();
-const current_date = date.format(current_date_time, "YYYY-MM-DD");
-const current_time = date.format(current_date_time, "HH:mm:ss");
+function getCurrentTime() {
+  const current_time = date.format(new Date(), "HH:mm:ss");
+
+  return current_time;
+}
+
+function getCurrentDate(params) {
+  const current_date = date.format(new Date(), "YYYY-MM-DD");
+
+  return current_date;
+}
 
 async function getRoomById(req, res) {
   const { room_id } = req.params;
@@ -33,6 +41,9 @@ async function getRoomById(req, res) {
 }
 
 async function getLiveRooms(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const response = await Room.findAll({
     order: [
       [Sequelize.col("current_participants_number"), "DESC"],
@@ -61,6 +72,9 @@ async function getLiveRooms(req, res) {
 }
 
 async function checkIfLive(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const { room_id } = req.params;
 
   const room = await Room.findOne({
@@ -112,6 +126,9 @@ async function getMatchRooms(req, res) {
 }
 
 async function getUserRooms(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const { user_id } = req.params;
 
   const response = await Room.findAll({
@@ -139,6 +156,9 @@ async function getUserRooms(req, res) {
 }
 
 async function getMyRooms(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const user_id = req.userData.user_id;
 
   const response = await Room.findAll({
