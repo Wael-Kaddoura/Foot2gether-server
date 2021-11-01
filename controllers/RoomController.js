@@ -18,7 +18,10 @@ function getCurrentDate(params) {
   return current_date;
 }
 
-async function getRoomById(req, res) {
+async function getLiveRoomById(req, res) {
+  const current_date = getCurrentDate();
+  const current_time = getCurrentTime();
+
   const { room_id } = req.params;
 
   const response = await Room.findOne({
@@ -29,6 +32,11 @@ async function getRoomById(req, res) {
         model: Match,
         as: "matchroom",
         include: ["team1", "team2"],
+        where: {
+          match_day: current_date,
+          kick_off: { [Op.lte]: current_time },
+          full_time: { [Op.gte]: current_time },
+        },
       },
       {
         model: User,
@@ -250,7 +258,7 @@ async function createRoom(req, res, next) {
 }
 
 module.exports = {
-  getRoomById,
+  getLiveRoomById,
   getLiveRooms,
   getLiveRoomsCount,
   checkIfLive,
