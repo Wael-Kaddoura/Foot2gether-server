@@ -5,7 +5,6 @@ const bcryptjs = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 
 const { User, UserFollower } = require("../models");
-const { map } = require("lodash");
 
 async function login(req, res) {
   const v = new Validator();
@@ -100,6 +99,8 @@ async function signUp(req, res) {
   const cover_photo =
     "http://localhost:8000/cover_photo/default_cover_photo.jpg";
 
+  const bio = "Hey, I'm on Foot2gether!";
+
   const is_email_used = await User.findOne({ where: { email: email } });
   const is_username_used = await User.findOne({
     where: { username: username },
@@ -124,9 +125,10 @@ async function signUp(req, res) {
           password: hash,
           gender,
           fav_team_id,
+          user_type_id: 1,
           profile_picture,
           cover_photo,
-          user_type_id: 1,
+          bio,
         };
 
         try {
