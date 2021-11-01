@@ -12,9 +12,9 @@ module.exports = {
           fav_team_id: "9",
           user_type_id: "3",
           profile_picture:
-            "http://localhost:8000/profile_picture/default_profile_picture.jpg",
+            "http://3.144.252.18/profile_picture/default_profile_picture.jpg",
           cover_photo:
-            "http://localhost:8000/cover_photo/default_cover_photo.jpg",
+            "http://3.144.252.18/cover_photo/default_cover_photo.jpg",
           bio: "Hi, its the Admin!",
           createdAt: new Date(),
           updatedAt: new Date(),

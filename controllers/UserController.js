@@ -94,10 +94,9 @@ async function signUp(req, res) {
 
   const { username, email, password, gender, fav_team_id } = req.body;
   const profile_picture =
-    "http://localhost:8000/profile_picture/default_profile_picture.jpg";
+    "http://3.144.252.18/profile_picture/default_profile_picture.jpg";
 
-  const cover_photo =
-    "http://localhost:8000/cover_photo/default_cover_photo.jpg";
+  const cover_photo = "http://3.144.252.18/cover_photo/default_cover_photo.jpg";
 
   const bio = "Hey, I'm on Foot2gether!";
 
@@ -284,7 +283,7 @@ async function changeProfilePicture(req, res) {
   });
 
   user.profile_picture =
-    "http://localhost:8000/profile_picture/" + req.file.filename;
+    "http://3.144.252.18/profile_picture/" + req.file.filename;
 
   const response = await user.save();
 
@@ -298,7 +297,7 @@ async function changeCoverPhoto(req, res) {
     where: { id: id },
   });
 
-  user.cover_photo = "http://localhost:8000/cover_photo/" + req.file.filename;
+  user.cover_photo = "http://3.144.252.18/cover_photo/" + req.file.filename;
 
   const response = await user.save();
 
