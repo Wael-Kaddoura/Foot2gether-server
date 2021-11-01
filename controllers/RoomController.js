@@ -53,7 +53,10 @@ async function getLiveRooms(req, res) {
   const current_time = getCurrentTime();
 
   const response = await Room.findAll({
-    order: [[Sequelize.col("matchroom.kick_off"), "ASC"]],
+    order: [
+      [Sequelize.col("matchroom.kick_off"), "ASC"],
+      [Sequelize.col("id"), "ASC"],
+    ],
 
     include: [
       {
@@ -129,14 +132,20 @@ async function getMatchRooms(req, res) {
   res.send(response);
 }
 
-async function getUserRooms(req, res) {
+async function getUserLiveRooms(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
   const { user_id } = req.params;
 
   const response = await Room.findAll({
+    order: [
+      [Sequelize.col("matchroom.kick_off"), "ASC"],
+      [Sequelize.col("id"), "ASC"],
+    ],
+
     where: { creator_id: user_id },
+
     include: [
       {
         model: Match,
@@ -158,13 +167,18 @@ async function getUserRooms(req, res) {
   res.send(response);
 }
 
-async function getMyRooms(req, res) {
+async function getMyLiveRooms(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
   const user_id = req.userData.user_id;
 
   const response = await Room.findAll({
+    order: [
+      [Sequelize.col("matchroom.kick_off"), "ASC"],
+      [Sequelize.col("id"), "ASC"],
+    ],
+
     where: { creator_id: user_id },
     include: [
       {
@@ -263,7 +277,7 @@ module.exports = {
   getLiveRoomsCount,
   checkIfLive,
   getMatchRooms,
-  getUserRooms,
-  getMyRooms,
+  getUserLiveRooms,
+  getMyLiveRooms,
   createRoom,
 };
