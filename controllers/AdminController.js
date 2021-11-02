@@ -11,7 +11,7 @@ function getCurrentTime() {
   return current_time;
 }
 
-function getCurrentDate(params) {
+function getCurrentDate() {
   const current_date = date.format(new Date(), "YYYY-MM-DD");
 
   return current_date;

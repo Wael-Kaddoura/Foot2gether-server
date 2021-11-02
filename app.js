@@ -13,7 +13,7 @@ const blogRoute = require("./routes/Blog");
 const teamRoute = require("./routes/Team");
 
 app.use(cors());
-app.options("*", cors()); // include before other routes
+app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
