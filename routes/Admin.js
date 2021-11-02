@@ -8,7 +8,7 @@ router.use(checkAuthMiddleware.checkAuthAdmin);
 
 router.get("/cards_count", AdminController.getCardsCount);
 router.get("/match/all", AdminController.getAllMatches);
-// router.get("/match/today", AdminController.getTodaysMatches);
+router.get("/match/today", AdminController.getTodaysMatches);
 router.get("/match/available", AdminController.getAvailableMatches);
 router.get("/room/today", AdminController.getTodaysRooms);
 router.get("/match/create_options", AdminController.getCreateMatchOptions);
