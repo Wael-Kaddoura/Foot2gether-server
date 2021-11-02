@@ -239,7 +239,7 @@ async function getMyProfile(req, res) {
   const response = await User.findOne({
     // attributes: ["id", "username"],
     where: { id: id },
-    // include: ["fav_team", "follower", "following"],
+    include: ["fav_team", "follower", "following"],
   });
 
   res.send(response);
