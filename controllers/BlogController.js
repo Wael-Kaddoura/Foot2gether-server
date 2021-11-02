@@ -100,11 +100,17 @@ async function createBlog(req, res) {
 
   const new_blog = { title, body, image, author_id };
 
-  await Blog.create(new_blog);
+  try {
+    await Blog.create(new_blog);
 
-  res.status(201).send({
-    message: "Blog created successfully!",
-  });
+    res.status(201).send({
+      message: "Blog created successfully!",
+    });
+  } catch (error) {
+    res.status(422).send({
+      message: "Failed to Post Blog!",
+    });
+  }
 }
 
 async function editBlog(req, res) {
