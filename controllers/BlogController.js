@@ -116,6 +116,7 @@ async function createBlog(req, res) {
   } catch (error) {
     res.status(422).send({
       message: "Failed to Post Blog!",
+      error,
     });
   }
 }
