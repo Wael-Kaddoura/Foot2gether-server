@@ -96,15 +96,14 @@ async function createBlog(req, res) {
 
   const { title, body } = req.body;
   const author_id = req.userData.user_id;
-  const image = "http://3.144.252.18/blog_image/" + req.file.filename;
+  const image = "http://3.144.252.18/blog_image/123.jpg";
 
   const new_blog = { title, body, image, author_id };
 
-  const response = await Blog.create(new_blog);
+  await Blog.create(new_blog);
 
   res.status(201).send({
     message: "Blog created successfully!",
-    blog: response,
   });
 }
 
