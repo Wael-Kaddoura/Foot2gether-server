@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Users_Types", {
+    await queryInterface.createTable("users_types", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -21,7 +21,7 @@ module.exports = {
       },
     });
 
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable("users", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -80,7 +80,7 @@ module.exports = {
       },
     });
 
-    await queryInterface.createTable("Users_Followers", {
+    await queryInterface.createTable("users_followers", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -106,6 +106,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable("users");
   },
 };

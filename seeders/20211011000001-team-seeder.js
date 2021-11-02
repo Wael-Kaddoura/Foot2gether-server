@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("Teams", [
+    return queryInterface.bulkInsert("teams", [
       {
         name: "Arsenal",
         country: "England",

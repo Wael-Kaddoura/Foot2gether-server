@@ -1,6 +1,6 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert("Users_Types", [
+    return queryInterface.bulkInsert("users_types", [
       {
         user_type: "Normal User",
         createdAt: new Date(),

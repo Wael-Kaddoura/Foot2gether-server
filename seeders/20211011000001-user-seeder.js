@@ -19,7 +19,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         };
-        return queryInterface.bulkInsert("Users", [admin_data]);
+        return queryInterface.bulkInsert("users", [admin_data]);
       });
     });
   },
