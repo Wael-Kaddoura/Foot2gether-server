@@ -20,6 +20,30 @@ function getCurrentDate() {
 async function getCardsCount(req, res) {
   const current_date = getCurrentDate();
 
+  const response = await Room.findAll({
+    order: [
+      [Sequelize.col("matchroom.kick_off"), "DESC"],
+      [Sequelize.col("match_id")],
+    ],
+
+    include: [
+      {
+        model: Match,
+        as: "matchroom",
+        where: {
+          match_day: current_date,
+        },
+        include: ["team1", "team2"],
+      },
+      {
+        model: User,
+        as: "creator",
+      },
+    ],
+  });
+
+  res.send(response);
+
   // //get total matches count
   // const total_matches_data = await Match.findAll({
   //   attributes: [
@@ -66,7 +90,7 @@ async function getCardsCount(req, res) {
   //   // todays_rooms_count,
   // };
 
-  res.send({ total_matches_count: 3 });
+  // res.send({ total_matches_count: 3 });
 }
 
 async function getAllMatches(req, res) {
