@@ -41,32 +41,32 @@ async function getCardsCount(req, res) {
   const todays_matches_count =
     todays_matches_data[0].dataValues.todays_matches_count;
 
-  //get today's rooms count
-  const todays_rooms_data = await Room.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("Room.id")), "todays_rooms_count"],
-    ],
+  // //get today's rooms count
+  // const todays_rooms_data = await Room.findAll({
+  //   attributes: [
+  //     [Sequelize.fn("COUNT", Sequelize.col("Room.id")), "todays_rooms_count"],
+  //   ],
 
-    // include: [
-    //   {
-    //     model: Match,
-    //     as: "matchroom",
-    //     where: {
-    //       match_day: current_date,
-    //     },
-    //   },
-    // ],
-  });
+  //   // include: [
+  //   //   {
+  //   //     model: Match,
+  //   //     as: "matchroom",
+  //   //     where: {
+  //   //       match_day: current_date,
+  //   //     },
+  //   //   },
+  //   // ],
+  // });
 
-  const todays_rooms_count = todays_rooms_data[0].dataValues.todays_rooms_count;
+  // const todays_rooms_count = todays_rooms_data[0].dataValues.todays_rooms_count;
 
-  const cards_count = {
-    total_matches_count,
-    todays_matches_count,
-    todays_rooms_count,
-  };
+  // const cards_count = {
+  //   total_matches_count,
+  //   todays_matches_count,
+  //   // todays_rooms_count,
+  // };
 
-  res.send(cards_count);
+  res.send({ total_matches_count, todays_matches_count });
 }
 
 async function getAllMatches(req, res) {
