@@ -236,13 +236,13 @@ async function getFollowersCount(req, res) {
 async function getMyProfile(req, res) {
   const id = req.userData.user_id;
 
-  // const response = await User.findOne({
-  //   attributes: ["id", "username"],
-  //   where: { id: id },
-  //   include: ["fav_team", "follower", "following"],
-  // });
+  const response = await User.findOne({
+    // attributes: ["id", "username"],
+    where: { id: id },
+    // include: ["fav_team", "follower", "following"],
+  });
 
-  res.send({ id: id });
+  res.send(response);
 }
 
 async function saveNotificationToken(req, res) {
