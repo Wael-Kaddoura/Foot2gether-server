@@ -98,7 +98,14 @@ async function createBlog(req, res) {
   const author_id = req.userData.user_id;
   const image = "http://3.144.252.18/blog_image/" + req.file.filename;
 
-  const new_blog = { title, body, image, author_id };
+  const new_blog = {
+    title,
+    body,
+    image,
+    author_id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
   try {
     await Blog.create(new_blog);
