@@ -100,11 +100,10 @@ async function createBlog(req, res) {
 
   const new_blog = { title, body, image, author_id };
 
-  const response = await Blog.create(new_blog);
+  await Blog.create(new_blog);
 
   res.status(201).send({
     message: "Blog created successfully!",
-    blog: response,
   });
 }
 
