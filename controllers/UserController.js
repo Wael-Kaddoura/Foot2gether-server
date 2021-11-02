@@ -4,7 +4,7 @@ const Validator = require("fastest-validator");
 const bcryptjs = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 
-const { User, UserFollower } = require("../models");
+const { User, UserFollower, Team } = require("../models");
 
 async function login(req, res) {
   const v = new Validator();
@@ -239,7 +239,20 @@ async function getMyProfile(req, res) {
   const response = await User.findOne({
     attributes: ["id", "username"],
     where: { id: id },
-    // include: ["fav_team", "follower", "following"],
+    include: [
+      {
+        model: Team,
+        as: "fav_team",
+      },
+      {
+        model: UserFollower,
+        as: "follower",
+      },
+      {
+        model: UserFollower,
+        as: "following",
+      },
+    ],
   });
 
   res.send(response);
