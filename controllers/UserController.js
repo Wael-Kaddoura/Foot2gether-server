@@ -237,9 +237,9 @@ async function getMyProfile(req, res) {
   const id = req.userData.user_id;
 
   const response = await User.findOne({
-    // attributes: ["id", "username"],
+    attributes: ["id", "username"],
     where: { id: id },
-    include: ["fav_team", "follower", "following"],
+    // include: ["fav_team", "follower", "following"],
   });
 
   res.send(response);
