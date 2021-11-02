@@ -47,15 +47,15 @@ async function getCardsCount(req, res) {
       [Sequelize.fn("COUNT", Sequelize.col("Room.id")), "todays_rooms_count"],
     ],
 
-    include: [
-      {
-        model: Match,
-        as: "matchroom",
-        where: {
-          match_day: current_date,
-        },
-      },
-    ],
+    // include: [
+    //   {
+    //     model: Match,
+    //     as: "matchroom",
+    //     where: {
+    //       match_day: current_date,
+    //     },
+    //   },
+    // ],
   });
 
   const todays_rooms_count = todays_rooms_data[0].dataValues.todays_rooms_count;
