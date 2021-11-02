@@ -20,26 +20,26 @@ function getCurrentDate() {
 async function getCardsCount(req, res) {
   const current_date = getCurrentDate();
 
-  //get total matches count
-  const total_matches_data = await Match.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("id")), "total_matches_count"],
-    ],
-  });
-  const total_matches_count =
-    total_matches_data[0].dataValues.total_matches_count;
+  // //get total matches count
+  // const total_matches_data = await Match.findAll({
+  //   attributes: [
+  //     [Sequelize.fn("COUNT", Sequelize.col("id")), "total_matches_count"],
+  //   ],
+  // });
+  // const total_matches_count =
+  //   total_matches_data[0].dataValues.total_matches_count;
 
-  //get today's matches count
-  const todays_matches_data = await Match.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("id")), "todays_matches_count"],
-    ],
-    where: {
-      match_day: current_date,
-    },
-  });
-  const todays_matches_count =
-    todays_matches_data[0].dataValues.todays_matches_count;
+  // //get today's matches count
+  // const todays_matches_data = await Match.findAll({
+  //   attributes: [
+  //     [Sequelize.fn("COUNT", Sequelize.col("id")), "todays_matches_count"],
+  //   ],
+  //   where: {
+  //     match_day: current_date,
+  //   },
+  // });
+  // const todays_matches_count =
+  //   todays_matches_data[0].dataValues.todays_matches_count;
 
   // //get today's rooms count
   // const todays_rooms_data = await Room.findAll({
@@ -66,7 +66,7 @@ async function getCardsCount(req, res) {
   //   // todays_rooms_count,
   // };
 
-  res.send({ total_matches_count, todays_matches_count });
+  res.send({ total_matches_count: 3 });
 }
 
 async function getAllMatches(req, res) {
