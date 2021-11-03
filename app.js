@@ -5,6 +5,8 @@ const cors = require("cors");
 
 const port = process.env.PORT || 8000;
 
+process.env.TZ = "Asia/Beirut"; // set node.js timezone
+
 const adminRoute = require("./routes/Admin");
 const userRoute = require("./routes/User");
 const matchRoute = require("./routes/Match");
