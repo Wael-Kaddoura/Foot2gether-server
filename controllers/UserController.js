@@ -165,7 +165,10 @@ async function searchUsersByUsername(req, res) {
 
   const response = await User.findAll({
     attributes: ["id", "username", "profile_picture"],
-    where: { username: { [Op.like]: "%" + username + "%" } },
+    where: {
+      username: { [Op.like]: "%" + username + "%" },
+      id: { [Op.not]: my_id },
+    },
     include: ["fav_team", "follower"],
   });
 
