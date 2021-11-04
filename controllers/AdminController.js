@@ -183,7 +183,25 @@ async function createNewRoom(req, res) {
   }
 }
 
-async function changeMatchScore(req, res) {
+async function deleteRoom(req, res) {
+  const { room_id } = req.params;
+
+  try {
+    const response = await Room.destroy({
+      where: { id: room_id },
+    });
+    res.status(200).json({
+      message: "Room Successfully Deleted!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
+}
+
+async function editMatchScore(req, res) {
   const v = new Validator();
   const schema = {
     match_id: { type: "number", optional: false },
@@ -214,6 +232,37 @@ async function changeMatchScore(req, res) {
   res.send(response);
 }
 
+async function editRoom(req, res) {
+  const v = new Validator();
+  const schema = {
+    match_id: { type: "string", optional: false },
+    name: { type: "string", optional: false },
+  };
+
+  const validation_response = v.validate(req.body, schema);
+
+  if (validation_response !== true) {
+    return res.status(400).json({
+      message: "Validation Failed!",
+      errors: validation_response,
+    });
+  }
+
+  const { room_id } = req.params;
+  const { match_id, name } = req.body;
+
+  const room = await Room.findOne({
+    where: { id: room_id },
+  });
+
+  room.name = name;
+  room.match_id = match_id;
+
+  const response = await room.save();
+
+  res.send(response);
+}
+
 module.exports = {
   getAllMatches,
   getTodaysMatches,
@@ -222,5 +271,7 @@ module.exports = {
   getAvailableMatches,
   createNewMatch,
   createNewRoom,
-  changeMatchScore,
+  editMatchScore,
+  editRoom,
+  deleteRoom,
 };
