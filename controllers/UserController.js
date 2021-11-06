@@ -94,10 +94,10 @@ async function signUp(req, res) {
 
   const { username, email, password, gender, fav_team_id } = req.body;
   const profile_picture =
-    "https://foot2gether.ml/profile_picture/default_profile_picture.jpg";
+    "http://localhost:8000/profile_picture/default_profile_picture.jpg";
 
   const cover_photo =
-    "https://foot2gether.ml/cover_photo/default_cover_photo.jpg";
+    "http://localhost:8000/cover_photo/default_cover_photo.jpg";
 
   const bio = "Hey, I'm on Foot2gether!";
 
@@ -159,6 +159,42 @@ async function getUserType(req, res) {
   res.send(response);
 }
 
+async function getUserSuggestions(req, res) {
+  const my_id = req.userData.user_id;
+
+  try {
+    const my_fav_team = await User.findOne({
+      attributes: ["fav_team.id"],
+      where: { id: my_id },
+      include: ["fav_team"],
+    });
+    my_fav_team_id = my_fav_team.dataValues.fav_team.dataValues.id;
+    const response = await User.findAll({
+      attributes: ["id", "username", "profile_picture"],
+      where: {
+        id: { [Op.not]: my_id },
+      },
+
+      include: [
+        {
+          model: Team,
+          as: "fav_team",
+          where: {
+            id: my_fav_team_id,
+          },
+        },
+      ],
+    });
+
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
+}
+
 async function searchUsersByUsername(req, res) {
   const my_id = req.userData.user_id;
   const { username } = req.params;
@@ -170,6 +206,7 @@ async function searchUsersByUsername(req, res) {
       id: { [Op.not]: my_id },
     },
     include: ["fav_team", "follower"],
+    limit: 10,
   });
 
   response.forEach((user) => {
@@ -287,7 +324,7 @@ async function changeProfilePicture(req, res) {
   });
 
   user.profile_picture =
-    "https://foot2gether.ml/profile_picture/" + req.file.filename;
+    "http://localhost:8000/profile_picture/" + req.file.filename;
 
   const response = await user.save();
 
@@ -301,7 +338,7 @@ async function changeCoverPhoto(req, res) {
     where: { id: id },
   });
 
-  user.cover_photo = "https://foot2gether.ml/cover_photo/" + req.file.filename;
+  user.cover_photo = "http://localhost:8000/cover_photo/" + req.file.filename;
 
   const response = await user.save();
 
@@ -420,6 +457,7 @@ module.exports = {
   login,
   signUp,
   getUserType,
+  getUserSuggestions,
   searchUsersByUsername,
   getFollowing,
   getFollowers,
