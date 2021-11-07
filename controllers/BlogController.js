@@ -4,78 +4,126 @@ const Validator = require("fastest-validator");
 const { Blog, BlogComment } = require("../models");
 
 async function getBlogs(req, res) {
-  const response = await Blog.findAll({ include: "author" });
-
-  res.send(response);
+  try {
+    const response = await Blog.findAll({ include: "author" });
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getLatestBlogs(req, res) {
-  const response = await Blog.findAll({
-    order: [[Sequelize.col("updatedAt"), "DESC"]],
-    limit: 2,
-    include: "author",
-  });
+  try {
+    const response = await Blog.findAll({
+      order: [[Sequelize.col("updatedAt"), "DESC"]],
+      limit: 2,
+      include: "author",
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getMyBlogs(req, res) {
   const user_id = req.userData.user_id;
 
-  const response = await Blog.findAll({
-    order: [[Sequelize.col("updatedAt"), "DESC"]],
-    where: { author_id: user_id },
-  });
+  try {
+    const response = await Blog.findAll({
+      order: [[Sequelize.col("updatedAt"), "DESC"]],
+      where: { author_id: user_id },
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getUserBlogs(req, res) {
   const { user_id } = req.params;
 
-  const response = await Blog.findAll({
-    order: [[Sequelize.col("updatedAt"), "DESC"]],
-    where: { author_id: user_id },
-  });
+  try {
+    const response = await Blog.findAll({
+      order: [[Sequelize.col("updatedAt"), "DESC"]],
+      where: { author_id: user_id },
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getBlogComments(req, res) {
   const { id } = req.params;
 
-  const response = await BlogComment.findAll({
-    where: { blog_id: id },
-    include: { all: true },
-  });
+  try {
+    const response = await BlogComment.findAll({
+      where: { blog_id: id },
+      include: { all: true },
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getBlogCommentsCount(req, res) {
   const { id } = req.params;
 
-  const response = await BlogComment.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("id")), "comments_count"],
-    ],
-    where: { blog_id: id },
-  });
+  try {
+    const response = await BlogComment.findAll({
+      attributes: [
+        [Sequelize.fn("COUNT", Sequelize.col("id")), "comments_count"],
+      ],
+      where: { blog_id: id },
+    });
 
-  const comments_count = response[0];
+    const comments_count = response[0];
 
-  res.send(comments_count);
+    res.send(comments_count);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getBlog(req, res) {
   const { id } = req.params;
 
-  const response = await Blog.findOne({
-    where: { id: id },
-    include: "author",
-  });
+  try {
+    const response = await Blog.findOne({
+      where: { id: id },
+      include: "author",
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function createBlog(req, res) {
@@ -111,7 +159,7 @@ async function createBlog(req, res) {
     await Blog.create(new_blog);
 
     res.status(201).send({
-      message: "Blog created successfully!",
+      message: "Blog Created Successfully!",
     });
   } catch (error) {
     res.status(422).send({
@@ -142,21 +190,39 @@ async function editBlog(req, res) {
   const { title, body, image } = req.body;
   const edited_blog = { title, body, image };
 
-  const response = await Blog.update(edited_blog, {
-    where: { id: id },
-  });
+  try {
+    await Blog.update(edited_blog, {
+      where: { id: id },
+    });
 
-  res.status(204).send();
+    res.status(204).send({
+      message: "Blog Edited Successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function deleteBlog(req, res) {
   const { id } = req.params;
 
-  const response = Blog.destroy({
-    where: { id: id },
-  });
+  try {
+    Blog.destroy({
+      where: { id: id },
+    });
 
-  res.status(204).send();
+    res.status(204).send({
+      message: "Blog Deleted Successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function addComment(req, res) {
@@ -180,12 +246,19 @@ async function addComment(req, res) {
 
   const new_blog = { body, author_id, blog_id };
 
-  const response = await BlogComment.create(new_blog);
+  try {
+    const response = await BlogComment.create(new_blog);
 
-  res.status(201).send({
-    message: "Comment Added Successfully!",
-    blog: response,
-  });
+    res.status(201).send({
+      message: "Comment Added Successfully!",
+      blog: response,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 module.exports = {

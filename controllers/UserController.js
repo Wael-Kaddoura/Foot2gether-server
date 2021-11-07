@@ -94,10 +94,10 @@ async function signUp(req, res) {
 
   const { username, email, password, gender, fav_team_id } = req.body;
   const profile_picture =
-    "http://localhost:8000/profile_picture/default_profile_picture.jpg";
+    "https://foot2gether.ml/profile_picture/default_profile_picture.jpg";
 
   const cover_photo =
-    "http://localhost:8000/cover_photo/default_cover_photo.jpg";
+    "https://foot2gether.ml/cover_photo/default_cover_photo.jpg";
 
   const bio = "Hey, I'm on Foot2gether!";
 
@@ -151,12 +151,19 @@ async function signUp(req, res) {
 async function getUserType(req, res) {
   const user_id = req.userData.user_id;
 
-  const response = await User.findOne({
-    where: { id: user_id },
-    attributes: ["user_type_id"],
-  });
+  try {
+    const response = await User.findOne({
+      where: { id: user_id },
+      attributes: ["user_type_id"],
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getUserSuggestions(req, res) {
@@ -177,7 +184,6 @@ async function getUserSuggestions(req, res) {
       where: {
         id: { [Op.not]: my_id },
       },
-
       include: [
         {
           model: Team,
@@ -216,91 +222,133 @@ async function searchUsersByUsername(req, res) {
   const my_id = req.userData.user_id;
   const { username } = req.params;
 
-  const response = await User.findAll({
-    attributes: ["id", "username", "profile_picture"],
-    where: {
-      username: { [Op.like]: "%" + username + "%" },
-      id: { [Op.not]: my_id },
-    },
-    include: ["fav_team", "follower"],
-    limit: 10,
-  });
+  try {
+    const response = await User.findAll({
+      attributes: ["id", "username", "profile_picture"],
+      where: {
+        username: { [Op.like]: "%" + username + "%" },
+        id: { [Op.not]: my_id },
+      },
+      include: ["fav_team", "follower"],
+      limit: 10,
+    });
 
-  response.forEach((user) => {
-    user.dataValues.is_followed = false;
-    for (const follower of user.dataValues.follower) {
-      if (follower.user_id == my_id) {
-        user.dataValues.is_followed = true;
-        break;
+    response.forEach((user) => {
+      user.dataValues.is_followed = false;
+      for (const follower of user.dataValues.follower) {
+        if (follower.user_id == my_id) {
+          user.dataValues.is_followed = true;
+          break;
+        }
       }
-    }
-  });
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getFollowing(req, res) {
-  const my_id = 2;
+  const my_id = req.userData.user_id;
 
-  const response = await UserFollower.findAll({
-    where: { user_id: my_id },
-    include: "following",
-  });
+  try {
+    const response = await UserFollower.findAll({
+      where: { user_id: my_id },
+      include: "following",
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getFollowers(req, res) {
-  const my_id = 1;
+  const my_id = req.userData.user_id;
 
-  const response = await UserFollower.findAll({
-    where: { following_id: my_id },
-    include: "follower",
-  });
+  try {
+    const response = await UserFollower.findAll({
+      where: { following_id: my_id },
+      include: "follower",
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getFollowingCount(req, res) {
-  const my_id = 2;
+  const my_id = req.userData.user_id;
 
-  const response = await UserFollower.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("id")), "following_count"],
-    ],
-    where: { user_id: my_id },
-  });
+  try {
+    const response = await UserFollower.findAll({
+      attributes: [
+        [Sequelize.fn("COUNT", Sequelize.col("id")), "following_count"],
+      ],
+      where: { user_id: my_id },
+    });
 
-  const following_count = response[0];
+    const following_count = response[0];
 
-  res.send(following_count);
+    res.send(following_count);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getFollowersCount(req, res) {
-  const my_id = 1;
+  const my_id = req.userData.user_id;
 
-  const response = await UserFollower.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("id")), "followers_count"],
-    ],
-    where: { following_id: my_id },
-  });
+  try {
+    const response = await UserFollower.findAll({
+      attributes: [
+        [Sequelize.fn("COUNT", Sequelize.col("id")), "followers_count"],
+      ],
+      where: { following_id: my_id },
+    });
 
-  const followers_count = response[0];
+    const followers_count = response[0];
 
-  res.send(followers_count);
+    res.send(followers_count);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getMyProfile(req, res) {
   const id = req.userData.user_id;
 
-  const response = await User.findOne({
-    attributes: ["id", "username"],
-    where: { id: id },
-    include: { all: true },
-  });
+  try {
+    const response = await User.findOne({
+      attributes: ["id", "username"],
+      where: { id: id },
+      include: { all: true },
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function saveNotificationToken(req, res) {
@@ -308,95 +356,138 @@ async function saveNotificationToken(req, res) {
 
   const { notification_token } = req.body;
 
-  const user = await User.findOne({
-    where: { id: id },
-  });
+  try {
+    const user = await User.findOne({
+      where: { id: id },
+    });
 
-  user.notification_token = notification_token;
+    user.notification_token = notification_token;
 
-  const response = await user.save();
+    const response = await user.save();
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function clearNotificationToken(req, res) {
   const id = req.userData.user_id;
 
-  const user = await User.findOne({
-    where: { id: id },
-  });
+  try {
+    const user = await User.findOne({
+      where: { id: id },
+    });
 
-  user.notification_token = "";
+    user.notification_token = "";
 
-  const response = await user.save();
+    const response = await user.save();
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function changeProfilePicture(req, res) {
   const id = req.userData.user_id;
 
-  const user = await User.findOne({
-    where: { id: id },
-  });
+  try {
+    const user = await User.findOne({
+      where: { id: id },
+    });
 
-  user.profile_picture =
-    "http://localhost:8000/profile_picture/" + req.file.filename;
+    user.profile_picture =
+      "https://foot2gether.ml/profile_picture/" + req.file.filename;
 
-  const response = await user.save();
+    const response = await user.save();
 
-  res.send(response.profile_picture);
+    res.send(response.profile_picture);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function changeCoverPhoto(req, res) {
   const id = req.userData.user_id;
 
-  const user = await User.findOne({
-    where: { id: id },
-  });
+  try {
+    const user = await User.findOne({
+      where: { id: id },
+    });
 
-  user.cover_photo = "http://localhost:8000/cover_photo/" + req.file.filename;
+    user.cover_photo =
+      "https://foot2gether.ml/cover_photo/" + req.file.filename;
 
-  const response = await user.save();
+    const response = await user.save();
 
-  res.send(response.cover_photo);
+    res.send(response.cover_photo);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function changeBio(req, res) {
   const id = req.userData.user_id;
   const { new_bio } = req.body;
 
-  const user = await User.findOne({
-    where: { id: id },
-  });
+  try {
+    const user = await User.findOne({
+      where: { id: id },
+    });
 
-  user.bio = new_bio;
+    user.bio = new_bio;
 
-  const response = await user.save();
+    const response = await user.save();
 
-  res.send(response.bio);
+    res.send(response.bio);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getUser(req, res) {
   const { id } = req.params;
   const my_id = req.userData.user_id;
 
-  const response = await User.findOne({
-    attributes: ["id", "username", "profile_picture", "cover_photo", "bio"],
-    where: { id: id },
-    include: ["fav_team", "follower", "following"],
-  });
+  try {
+    const response = await User.findOne({
+      attributes: ["id", "username", "profile_picture", "cover_photo", "bio"],
+      where: { id: id },
+      include: ["fav_team", "follower", "following"],
+    });
 
-  const check_if_followed = await UserFollower.findOne({
-    where: { user_id: my_id, following_id: id },
-  });
+    const check_if_followed = await UserFollower.findOne({
+      where: { user_id: my_id, following_id: id },
+    });
 
-  let is_followed = false;
-  if (check_if_followed) {
-    is_followed = true;
+    let is_followed = false;
+    if (check_if_followed) {
+      is_followed = true;
+    }
+
+    res.send({ user_data: response, is_followed });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
   }
-
-  res.send({ user_data: response, is_followed });
 }
 
 async function userTypeCheck(user_id) {
@@ -439,18 +530,25 @@ async function followUser(req, res) {
 
   const { followed_user_id } = req.body;
 
-  const response = await UserFollower.create({
-    user_id: id,
-    following_id: followed_user_id,
-  });
+  try {
+    const response = await UserFollower.create({
+      user_id: id,
+      following_id: followed_user_id,
+    });
 
-  //checking user type based on followers count
-  await userTypeCheck(followed_user_id);
+    //checking user type based on followers count
+    await userTypeCheck(followed_user_id);
 
-  res.send({
-    response: response,
-    message: "User Followed Successfully!",
-  });
+    res.send({
+      response: response,
+      message: "User Followed Successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function unfollowUser(req, res) {
@@ -458,20 +556,27 @@ async function unfollowUser(req, res) {
 
   const { unfollowed_user_id } = req.body;
 
-  const response = await UserFollower.destroy({
-    where: {
-      user_id: id,
-      following_id: unfollowed_user_id,
-    },
-  });
+  try {
+    const response = await UserFollower.destroy({
+      where: {
+        user_id: id,
+        following_id: unfollowed_user_id,
+      },
+    });
 
-  //checking user type based on followers count
-  await userTypeCheck(unfollowed_user_id);
+    //checking user type based on followers count
+    await userTypeCheck(unfollowed_user_id);
 
-  res.send({
-    response: response,
-    message: "User Unfollowed Successfully!",
-  });
+    res.send({
+      response: response,
+      message: "User Unfollowed Successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 module.exports = {

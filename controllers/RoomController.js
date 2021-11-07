@@ -24,59 +24,71 @@ async function getLiveRoomById(req, res) {
 
   const { room_id } = req.params;
 
-  const response = await Room.findOne({
-    where: { id: room_id },
-
-    include: [
-      {
-        model: Match,
-        as: "matchroom",
-        include: ["team1", "team2"],
-        where: {
-          match_day: current_date,
-          kick_off: { [Op.lte]: current_time },
-          full_time: { [Op.gte]: current_time },
+  try {
+    const response = await Room.findOne({
+      where: { id: room_id },
+      include: [
+        {
+          model: Match,
+          as: "matchroom",
+          include: ["team1", "team2"],
+          where: {
+            match_day: current_date,
+            kick_off: { [Op.lte]: current_time },
+            full_time: { [Op.gte]: current_time },
+          },
         },
-      },
-      {
-        model: User,
-        as: "creator",
-      },
-    ],
-  });
+        {
+          model: User,
+          as: "creator",
+        },
+      ],
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getLiveRooms(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
-  const response = await Room.findAll({
-    order: [
-      [Sequelize.col("matchroom.kick_off"), "ASC"],
-      [Sequelize.col("id"), "ASC"],
-    ],
-
-    include: [
-      {
-        model: Match,
-        as: "matchroom",
-        where: {
-          match_day: current_date,
-          kick_off: { [Op.lte]: current_time },
-          full_time: { [Op.gte]: current_time },
+  try {
+    const response = await Room.findAll({
+      order: [
+        [Sequelize.col("matchroom.kick_off"), "ASC"],
+        [Sequelize.col("id"), "ASC"],
+      ],
+      include: [
+        {
+          model: Match,
+          as: "matchroom",
+          where: {
+            match_day: current_date,
+            kick_off: { [Op.lte]: current_time },
+            full_time: { [Op.gte]: current_time },
+          },
+          include: ["team1", "team2"],
         },
-        include: ["team1", "team2"],
-      },
-      {
-        model: User,
-        as: "creator",
-      },
-    ],
-  });
+        {
+          model: User,
+          as: "creator",
+        },
+      ],
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function checkIfLive(req, res) {
@@ -85,51 +97,72 @@ async function checkIfLive(req, res) {
 
   const { room_id } = req.params;
 
-  const room = await Room.findOne({
-    where: { id: room_id },
-    include: [
-      {
-        model: Match,
-        as: "matchroom",
-        where: {
-          match_day: current_date,
-          kick_off: { [Op.lte]: current_time },
-          full_time: { [Op.gte]: current_time },
+  try {
+    const room = await Room.findOne({
+      where: { id: room_id },
+      include: [
+        {
+          model: Match,
+          as: "matchroom",
+          where: {
+            match_day: current_date,
+            kick_off: { [Op.lte]: current_time },
+            full_time: { [Op.gte]: current_time },
+          },
         },
-      },
-    ],
-  });
+      ],
+    });
 
-  let is_live_room = false;
+    let is_live_room = false;
 
-  if (room) {
-    is_live_room = true;
+    if (room) {
+      is_live_room = true;
+    }
+
+    res.send(is_live_room);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
   }
-
-  res.send(is_live_room);
 }
 
 async function getLiveRoomsCount(req, res) {
-  const response = await Room.findAll({
-    attributes: [
-      [Sequelize.fn("COUNT", Sequelize.col("id")), "live_rooms_count"],
-    ],
-  });
+  try {
+    const response = await Room.findAll({
+      attributes: [
+        [Sequelize.fn("COUNT", Sequelize.col("id")), "live_rooms_count"],
+      ],
+    });
 
-  const live_rooms_count = response[0];
+    const live_rooms_count = response[0];
 
-  res.send(live_rooms_count);
+    res.send(live_rooms_count);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getMatchRooms(req, res) {
   const { match_id } = req.params;
 
-  const response = await Room.findAll({
-    where: { match_id: match_id },
-    include: "creator",
-  });
+  try {
+    const response = await Room.findAll({
+      where: { match_id: match_id },
+      include: "creator",
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getUserLiveRooms(req, res) {
@@ -138,33 +171,38 @@ async function getUserLiveRooms(req, res) {
 
   const { user_id } = req.params;
 
-  const response = await Room.findAll({
-    order: [
-      [Sequelize.col("matchroom.kick_off"), "ASC"],
-      [Sequelize.col("id"), "ASC"],
-    ],
-
-    where: { creator_id: user_id },
-
-    include: [
-      {
-        model: Match,
-        as: "matchroom",
-        where: {
-          match_day: current_date,
-          kick_off: { [Op.lte]: current_time },
-          full_time: { [Op.gte]: current_time },
+  try {
+    const response = await Room.findAll({
+      order: [
+        [Sequelize.col("matchroom.kick_off"), "ASC"],
+        [Sequelize.col("id"), "ASC"],
+      ],
+      where: { creator_id: user_id },
+      include: [
+        {
+          model: Match,
+          as: "matchroom",
+          where: {
+            match_day: current_date,
+            kick_off: { [Op.lte]: current_time },
+            full_time: { [Op.gte]: current_time },
+          },
+          include: ["team1", "team2"],
         },
-        include: ["team1", "team2"],
-      },
-      {
-        model: User,
-        as: "creator",
-      },
-    ],
-  });
+        {
+          model: User,
+          as: "creator",
+        },
+      ],
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getMyLiveRooms(req, res) {
@@ -173,32 +211,38 @@ async function getMyLiveRooms(req, res) {
 
   const user_id = req.userData.user_id;
 
-  const response = await Room.findAll({
-    order: [
-      [Sequelize.col("matchroom.kick_off"), "ASC"],
-      [Sequelize.col("id"), "ASC"],
-    ],
-
-    where: { creator_id: user_id },
-    include: [
-      {
-        model: Match,
-        as: "matchroom",
-        where: {
-          match_day: current_date,
-          kick_off: { [Op.lte]: current_time },
-          full_time: { [Op.gte]: current_time },
+  try {
+    const response = await Room.findAll({
+      order: [
+        [Sequelize.col("matchroom.kick_off"), "ASC"],
+        [Sequelize.col("id"), "ASC"],
+      ],
+      where: { creator_id: user_id },
+      include: [
+        {
+          model: Match,
+          as: "matchroom",
+          where: {
+            match_day: current_date,
+            kick_off: { [Op.lte]: current_time },
+            full_time: { [Op.gte]: current_time },
+          },
+          include: ["team1", "team2"],
         },
-        include: ["team1", "team2"],
-      },
-      {
-        model: User,
-        as: "creator",
-      },
-    ],
-  });
+        {
+          model: User,
+          as: "creator",
+        },
+      ],
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function createRoom(req, res, next) {
@@ -226,6 +270,7 @@ async function createRoom(req, res, next) {
     name,
   };
 
+  //getting room's match data
   const match_info = await Match.findOne({
     where: { id: match_id },
     include: { all: true },
@@ -236,10 +281,11 @@ async function createRoom(req, res, next) {
     include: "follower",
   });
 
+  //getting room's creator followers
   const followers_list = creator_info.follower;
   let followers_tokens = [];
 
-  //getting notification token of users
+  //getting notification token of room's creator followers
   for (const follower of followers_list) {
     const follower_token = await User.findOne({
       where: { id: follower.user_id },
@@ -261,7 +307,9 @@ async function createRoom(req, res, next) {
   req.followersTokens = followers_tokens;
 
   try {
-    const response = await Room.create(new_room);
+    await Room.create(new_room);
+
+    //send notification to all room's creator followers, upon room creation
     FCMController.sendNotification(req, res, next);
   } catch (error) {
     res.status(500).json({

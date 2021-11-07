@@ -16,8 +16,6 @@ async function sendNotification(req, res, next) {
       notification: {
         title,
         body,
-        // click_action: "FCM_PLUGIN_ACTIVITY",
-        // icon: "fcm_push_icon",
       },
     };
 

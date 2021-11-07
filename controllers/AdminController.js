@@ -18,81 +18,114 @@ function getCurrentDate() {
 }
 
 async function getAllMatches(req, res) {
-  const response = await Match.findAll({
-    order: [
-      [Sequelize.col("match_day"), "DESC"],
-      [Sequelize.col("kick_off"), "ASC"],
-    ],
-    include: { all: true },
-  });
+  try {
+    const response = await Match.findAll({
+      order: [
+        [Sequelize.col("match_day"), "DESC"],
+        [Sequelize.col("kick_off"), "ASC"],
+      ],
+      include: { all: true },
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getTodaysMatches(req, res) {
   const current_date = getCurrentDate();
 
-  const response = await Match.findAll({
-    order: [[Sequelize.col("kick_off"), "ASC"]],
-    where: {
-      match_day: current_date,
-    },
-    include: { all: true },
-  });
+  try {
+    const response = await Match.findAll({
+      order: [[Sequelize.col("kick_off"), "ASC"]],
+      where: {
+        match_day: current_date,
+      },
+      include: { all: true },
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getTodaysRooms(req, res) {
   const current_date = getCurrentDate();
 
-  const response = await Room.findAll({
-    order: [
-      [Sequelize.col("matchroom.kick_off"), "DESC"],
-      [Sequelize.col("match_id")],
-    ],
-
-    include: [
-      {
-        model: Match,
-        as: "matchroom",
-        where: {
-          match_day: current_date,
+  try {
+    const response = await Room.findAll({
+      order: [
+        [Sequelize.col("matchroom.kick_off"), "DESC"],
+        [Sequelize.col("match_id")],
+      ],
+      include: [
+        {
+          model: Match,
+          as: "matchroom",
+          where: {
+            match_day: current_date,
+          },
+          include: ["team1", "team2"],
         },
-        include: ["team1", "team2"],
-      },
-      {
-        model: User,
-        as: "creator",
-      },
-    ],
-  });
+        {
+          model: User,
+          as: "creator",
+        },
+      ],
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getAvailableMatches(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
-  const response = await Match.findAll({
-    order: [[Sequelize.col("kick_off"), "ASC"]],
-    where: {
-      match_day: current_date,
-      full_time: { [Op.gt]: current_time },
-    },
-    order: [[Sequelize.col("kick_off"), "ASC"]],
-    include: ["team1", "team2"],
-  });
+  try {
+    const response = await Match.findAll({
+      order: [[Sequelize.col("kick_off"), "ASC"]],
+      where: {
+        match_day: current_date,
+        full_time: { [Op.gt]: current_time },
+      },
+      order: [[Sequelize.col("kick_off"), "ASC"]],
+      include: ["team1", "team2"],
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getCreateMatchOptions(req, res) {
-  const competitions = await Competition.findAll({});
-  const teams = await Team.findAll({});
-
-  res.send({ competitions: competitions, teams: teams });
+  try {
+    const competitions = await Competition.findAll({});
+    const teams = await Team.findAll({});
+    res.send({ competitions: competitions, teams: teams });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function createNewMatch(req, res) {
@@ -187,7 +220,7 @@ async function deleteRoom(req, res) {
   const { room_id } = req.params;
 
   try {
-    const response = await Room.destroy({
+    await Room.destroy({
       where: { id: room_id },
     });
     res.status(200).json({
@@ -220,16 +253,25 @@ async function editMatchScore(req, res) {
 
   const { match_id, team1_score, team2_score } = req.body;
 
-  const match = await Match.findOne({
-    where: { id: match_id },
-  });
+  try {
+    const match = await Match.findOne({
+      where: { id: match_id },
+    });
 
-  match.team1_score = team1_score;
-  match.team2_score = team2_score;
+    match.team1_score = team1_score;
+    match.team2_score = team2_score;
 
-  const response = await match.save();
+    await match.save();
 
-  res.send(response);
+    res.status(200).json({
+      message: "Score Successfully Edited!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function editRoom(req, res) {
@@ -251,16 +293,25 @@ async function editRoom(req, res) {
   const { room_id } = req.params;
   const { match_id, name } = req.body;
 
-  const room = await Room.findOne({
-    where: { id: room_id },
-  });
+  try {
+    const room = await Room.findOne({
+      where: { id: room_id },
+    });
 
-  room.name = name;
-  room.match_id = match_id;
+    room.name = name;
+    room.match_id = match_id;
 
-  const response = await room.save();
+    await room.save();
 
-  res.send(response);
+    res.status(200).json({
+      message: "Room Successfully Edited!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 module.exports = {

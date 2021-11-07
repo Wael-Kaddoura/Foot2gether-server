@@ -3,19 +3,33 @@ const { Team } = require("../models");
 async function getTeamLogo(req, res) {
   const { id } = req.params;
 
-  const response = await Team.findOne({
-    where: { id: id },
-  });
+  try {
+    const response = await Team.findOne({
+      where: { id: id },
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 async function getTopTeams(req, res) {
-  const response = await Team.findAll({
-    limit: 16,
-  });
+  try {
+    const response = await Team.findAll({
+      limit: 16,
+    });
 
-  res.send(response);
+    res.send(response);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong!",
+      error: error,
+    });
+  }
 }
 
 module.exports = {

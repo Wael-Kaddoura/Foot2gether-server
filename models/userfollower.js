@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
+
   UserFollower.init(
     {
       user_id: {
