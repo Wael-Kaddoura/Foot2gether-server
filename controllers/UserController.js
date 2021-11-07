@@ -168,9 +168,12 @@ async function getUserSuggestions(req, res) {
       where: { id: my_id },
       include: ["fav_team"],
     });
+
     my_fav_team_id = my_fav_team.dataValues.fav_team.dataValues.id;
+
     const response = await User.findAll({
       attributes: ["id", "username", "profile_picture"],
+      order: [[Sequelize.col("username"), "ASC"]],
       where: {
         id: { [Op.not]: my_id },
       },
@@ -183,7 +186,21 @@ async function getUserSuggestions(req, res) {
             id: my_fav_team_id,
           },
         },
+        {
+          model: UserFollower,
+          as: "follower",
+        },
       ],
+    });
+
+    response.forEach((user) => {
+      user.dataValues.is_followed = false;
+      for (const follower of user.dataValues.follower) {
+        if (follower.user_id == my_id) {
+          user.dataValues.is_followed = true;
+          break;
+        }
+      }
     });
 
     res.send(response);
@@ -393,13 +410,15 @@ async function userTypeCheck(user_id) {
 
   const followers_count = followed_user_info[0].dataValues.followers_count;
 
-  //changing user type depending on followers count
-  if (followers_count >= 5) {
+  //changing user type based on followers count, users with 50 or more followers are premium users
+  if (followers_count >= 50) {
     const user = await User.findOne({
       where: { id: user_id },
     });
 
-    user.user_type_id = 2;
+    if (user.user_type_id != 3) {
+      user.user_type_id = 2;
+    }
 
     await user.save();
   } else {
@@ -407,7 +426,9 @@ async function userTypeCheck(user_id) {
       where: { id: user_id },
     });
 
-    user.user_type_id = 1;
+    if (user.user_type_id != 3) {
+      user.user_type_id = 1;
+    }
 
     await user.save();
   }
