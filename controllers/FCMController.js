@@ -1,6 +1,6 @@
 const FCM = require("fcm-node");
 const SERVER_KEY =
-  "AAAAmDQh_nE:APA91bFcJnYtohVwbGoQv9RSiEZGvn6RDDsIP6bwMx9IYb_b1xXZGteaSZzOT84mVycaU3zVoW02EbfJHE4gu15h-38Wtylb8U5-_yeSL0zJoJpLO7MMISRiDTPf9UJ-nojA8ml4KM88";
+  "AAAAEXROxtE:APA91bHXglLhhY1NMmX9XpuRwf5XQRSZS9RCyaBiAnZdnrHOWSYvGLMAfey3nUhfPecuu1k9__VW7aifrd-B8bT_rA4EaVUJ403gK07XPOB1Lpt0eY2BjZsPDgF1qxiIsp0FSogMOZet";
 
 async function sendNotification(req, res, next) {
   let { creator_username, team1, team2 } = req.notificationInfo;
