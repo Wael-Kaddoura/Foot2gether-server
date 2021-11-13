@@ -1,3 +1,5 @@
+# Foot2gether
+
 Foot2gether is a web application that will simulate the real-life experience of watching football games, with other fans, as participants watch, react and comment, via voice and video chat rooms.
 
 Foot2gether was developed using React with Material UI for the frontend, Node.JS with Express.JS for the backend, and MySQL for the database.
