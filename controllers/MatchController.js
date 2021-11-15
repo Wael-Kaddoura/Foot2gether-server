@@ -6,16 +6,15 @@ const { Match, Room } = require("../models");
 
 function getCurrentTime() {
   const current_time = date.format(new Date(), "HH:mm:ss");
-
   return current_time;
 }
 
 function getCurrentDate() {
   const current_date = date.format(new Date(), "YYYY-MM-DD");
-
   return current_date;
 }
 
+// get data about a certain match
 async function getMatch(req, res) {
   const { id } = req.params;
 
@@ -45,10 +44,12 @@ async function getMatch(req, res) {
   }
 }
 
+// get data about all Live Matches
 async function getLiveMatches(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
+  // a match is considered Live if its "kick_off" time is less than the current time, and its "full_time" time is greater than the current time
   try {
     const response = await Match.findAll({
       order: [[Sequelize.col("kick_off"), "ASC"]],
@@ -69,10 +70,12 @@ async function getLiveMatches(req, res) {
   }
 }
 
+// get data about all Finished Matches today
 async function getFinishedMatchesToday(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
+  // a match is considered Finished if its "full_time" time is less than the current time, and its "match_day" date matches today's date
   try {
     const response = await Match.findAll({
       order: [[Sequelize.col("kick_off"), "ASC"]],
@@ -92,10 +95,12 @@ async function getFinishedMatchesToday(req, res) {
   }
 }
 
+// get data about all Upcoming Matches today
 async function getUpcomingMatchesToday(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
+  // a match is considered Finished if its "kick_off" time is greater than the current time, and its "match_day" date matches today's date
   try {
     const response = await Match.findAll({
       order: [[Sequelize.col("kick_off"), "ASC"]],
@@ -115,6 +120,7 @@ async function getUpcomingMatchesToday(req, res) {
   }
 }
 
+// get data about the Next Match, which is the earliest of the Upcoming Matches
 async function getNextMatch(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
@@ -139,6 +145,7 @@ async function getNextMatch(req, res) {
   }
 }
 
+// get matches that a room can be created to, either a live or upcoming match today
 async function getAvailableMatches(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();

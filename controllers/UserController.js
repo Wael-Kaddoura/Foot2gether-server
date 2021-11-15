@@ -25,6 +25,7 @@ async function login(req, res) {
   const { email, password } = req.body;
 
   try {
+    // checking if the email is associated with an account
     const user = await User.findOne({ where: { email: email } });
 
     if (user == null) {
@@ -32,10 +33,12 @@ async function login(req, res) {
         message: "Invalid Credentials!",
       });
     } else {
+      // comparing the inputted password with the password stored in the Database
       bcryptjs.compare(password, user.password, (err, result) => {
         if (result) {
           const is_admin = user.user_type_id == 3 ? true : false;
 
+          // signing the JWT Token
           const token = JWT.sign(
             {
               user_id: user.id,
@@ -166,18 +169,20 @@ async function getUserType(req, res) {
   }
 }
 
+// get suggested users having similar favorite team to the user
 async function getUserSuggestions(req, res) {
   const my_id = req.userData.user_id;
 
   try {
+    // getting the user's favorite team ID
     const my_fav_team = await User.findOne({
       attributes: ["fav_team.id"],
       where: { id: my_id },
       include: ["fav_team"],
     });
-
     my_fav_team_id = my_fav_team.dataValues.fav_team.dataValues.id;
 
+    // getting top 10 users having the same favorite team as the user
     const response = await User.findAll({
       attributes: ["id", "username", "profile_picture"],
       order: [[Sequelize.col("username"), "ASC"]],
@@ -197,8 +202,10 @@ async function getUserSuggestions(req, res) {
           as: "follower",
         },
       ],
+      limit: 10,
     });
 
+    // getting the following status of the current user with the suggested users
     response.forEach((user) => {
       user.dataValues.is_followed = false;
       for (const follower of user.dataValues.follower) {
@@ -351,6 +358,7 @@ async function getMyProfile(req, res) {
   }
 }
 
+// saving the Firebase Notification Token of the user in the Database on Log in
 async function saveNotificationToken(req, res) {
   const id = req.userData.user_id;
 
@@ -374,6 +382,7 @@ async function saveNotificationToken(req, res) {
   }
 }
 
+// clearing the Firebase Notification Token of the user in the Database on Log out
 async function clearNotificationToken(req, res) {
   const id = req.userData.user_id;
 
@@ -472,6 +481,7 @@ async function getUser(req, res) {
       include: ["fav_team", "follower", "following"],
     });
 
+    // getting following status of the target user
     const check_if_followed = await UserFollower.findOne({
       where: { user_id: my_id, following_id: id },
     });
@@ -490,8 +500,9 @@ async function getUser(req, res) {
   }
 }
 
+// checking User Type based on followers count on each follow/unfollow
 async function userTypeCheck(user_id) {
-  //getting followers count
+  // getting followers count
   const followed_user_info = await UserFollower.findAll({
     attributes: [
       [Sequelize.fn("COUNT", Sequelize.col("id")), "followers_count"],
@@ -501,12 +512,13 @@ async function userTypeCheck(user_id) {
 
   const followers_count = followed_user_info[0].dataValues.followers_count;
 
-  //changing user type based on followers count, users with 50 or more followers are premium users
+  // changing user type based on followers count, users with 50 or more followers are premium users
   if (followers_count >= 50) {
     const user = await User.findOne({
       where: { id: user_id },
     });
 
+    // excluding the Admin from the process
     if (user.user_type_id != 3) {
       user.user_type_id = 2;
     }
@@ -517,6 +529,7 @@ async function userTypeCheck(user_id) {
       where: { id: user_id },
     });
 
+    // excluding the Admin from the process
     if (user.user_type_id != 3) {
       user.user_type_id = 1;
     }
@@ -536,7 +549,7 @@ async function followUser(req, res) {
       following_id: followed_user_id,
     });
 
-    //checking user type based on followers count
+    // checking user type based on new followers count
     await userTypeCheck(followed_user_id);
 
     res.send({
@@ -564,7 +577,7 @@ async function unfollowUser(req, res) {
       },
     });
 
-    //checking user type based on followers count
+    //checking user type based on new followers count
     await userTypeCheck(unfollowed_user_id);
 
     res.send({

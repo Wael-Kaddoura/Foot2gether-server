@@ -5,9 +5,6 @@ const cors = require("cors");
 
 const port = process.env.PORT || 8000;
 
-// set node.js timezone
-process.env.TZ = "Asia/Beirut";
-
 const adminRoute = require("./routes/Admin");
 const userRoute = require("./routes/User");
 const matchRoute = require("./routes/Match");
@@ -15,12 +12,16 @@ const roomRoute = require("./routes/Room");
 const blogRoute = require("./routes/Blog");
 const teamRoute = require("./routes/Team");
 
+// set node.js server timezone
+process.env.TZ = "Asia/Beirut";
+
 app.use(cors());
 app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// serving static resources
 app.use("/images", express.static("images/uploads"));
 app.use("/logos", express.static("images/teams_logos"));
 app.use("/blog_image", express.static("images/blogs"));

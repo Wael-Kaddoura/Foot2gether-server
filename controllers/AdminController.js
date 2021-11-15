@@ -7,13 +7,11 @@ const { Room, Match, Competition, Team, User } = require("../models");
 
 function getCurrentTime() {
   const current_time = date.format(new Date(), "HH:mm:ss");
-
   return current_time;
 }
 
 function getCurrentDate() {
   const current_date = date.format(new Date(), "YYYY-MM-DD");
-
   return current_date;
 }
 
@@ -57,6 +55,7 @@ async function getTodaysMatches(req, res) {
   }
 }
 
+// get rooms whose match is today
 async function getTodaysRooms(req, res) {
   const current_date = getCurrentDate();
 
@@ -91,6 +90,7 @@ async function getTodaysRooms(req, res) {
   }
 }
 
+// get matches that a room can be created to, either a live or upcoming match today
 async function getAvailableMatches(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
@@ -115,6 +115,7 @@ async function getAvailableMatches(req, res) {
   }
 }
 
+// get all competitions and teams to choose from
 async function getCreateMatchOptions(req, res) {
   try {
     const competitions = await Competition.findAll({});
@@ -167,6 +168,8 @@ async function createNewMatch(req, res) {
     stadium,
     team1_id,
     team2_id,
+
+    //default score of a newly created match
     team1_score: 0,
     team2_score: 0,
   };
@@ -201,7 +204,7 @@ async function createNewRoom(req, res) {
   const { match_id, name } = req.body;
   const new_room = {
     match_id,
-    creator_id: 1,
+    creator_id: 1, // since this controller is only accessible by the Admin
     name,
   };
 

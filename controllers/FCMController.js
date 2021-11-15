@@ -5,9 +5,10 @@ const SERVER_KEY =
 async function sendNotification(req, res, next) {
   let { creator_username, team1, team2 } = req.notificationInfo;
 
+  // setting the notification content
   let title = "New Room Created!";
   let body = `${creator_username} created a room to watch ${team1} vs ${team2}!`;
-  let regTokens = req.followersTokens;
+  let regTokens = req.followersTokens; // array containing all followers Firebase Notification Token
 
   try {
     let fcm = new FCM(SERVER_KEY);

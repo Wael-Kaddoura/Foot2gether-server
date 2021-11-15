@@ -17,6 +17,7 @@ async function getTeamLogo(req, res) {
   }
 }
 
+// get data about top teams, for user to choose from as the favorite team upon sign up
 async function getTopTeams(req, res) {
   try {
     const response = await Team.findAll({

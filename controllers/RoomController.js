@@ -8,13 +8,11 @@ const FCMController = require("./FCMController");
 
 function getCurrentTime() {
   const current_time = date.format(new Date(), "HH:mm:ss");
-
   return current_time;
 }
 
 function getCurrentDate() {
   const current_date = date.format(new Date(), "YYYY-MM-DD");
-
   return current_date;
 }
 
@@ -54,10 +52,12 @@ async function getLiveRoomById(req, res) {
   }
 }
 
+// get all Live Rooms
 async function getLiveRooms(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
+  // a room is considered live if its dedicated match is live
   try {
     const response = await Room.findAll({
       order: [
@@ -91,12 +91,14 @@ async function getLiveRooms(req, res) {
   }
 }
 
+// check if a room is live
 async function checkIfLive(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
 
   const { room_id } = req.params;
 
+  // a room is considered live is its dedicated match is live
   try {
     const room = await Room.findOne({
       where: { id: room_id },
@@ -147,6 +149,7 @@ async function getLiveRoomsCount(req, res) {
   }
 }
 
+// get all rooms associated to a certain match
 async function getMatchRooms(req, res) {
   const { match_id } = req.params;
 
@@ -165,6 +168,7 @@ async function getMatchRooms(req, res) {
   }
 }
 
+// get all live rooms that are created by a certain user
 async function getUserLiveRooms(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
@@ -205,6 +209,7 @@ async function getUserLiveRooms(req, res) {
   }
 }
 
+// get all live rooms that are created by the current user
 async function getMyLiveRooms(req, res) {
   const current_date = getCurrentDate();
   const current_time = getCurrentTime();
@@ -270,7 +275,7 @@ async function createRoom(req, res, next) {
     name,
   };
 
-  //getting room's match data
+  // get room's match data
   const match_info = await Match.findOne({
     where: { id: match_id },
     include: { all: true },
@@ -281,11 +286,11 @@ async function createRoom(req, res, next) {
     include: "follower",
   });
 
-  //getting room's creator followers
+  // get room's creator followers
   const followers_list = creator_info.follower;
   let followers_tokens = [];
 
-  //getting notification token of room's creator followers
+  // get notification token of room's creator followers
   for (const follower of followers_list) {
     const follower_token = await User.findOne({
       where: { id: follower.user_id },
@@ -297,6 +302,7 @@ async function createRoom(req, res, next) {
     }
   }
 
+  // setting the notification info
   const notification_info = {
     creator_username: creator_info.username,
     team1: match_info.team1.name,
@@ -309,7 +315,7 @@ async function createRoom(req, res, next) {
   try {
     await Room.create(new_room);
 
-    //send notification to all room's creator followers, upon room creation
+    //send notification to all room's creator followers upon room creation
     FCMController.sendNotification(req, res, next);
   } catch (error) {
     res.status(500).json({

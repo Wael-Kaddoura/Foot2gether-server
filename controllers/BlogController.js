@@ -3,6 +3,7 @@ const Validator = require("fastest-validator");
 
 const { Blog, BlogComment } = require("../models");
 
+// get all blogs
 async function getBlogs(req, res) {
   try {
     const response = await Blog.findAll({ include: "author" });
@@ -15,6 +16,7 @@ async function getBlogs(req, res) {
   }
 }
 
+// get latest 2 blogs
 async function getLatestBlogs(req, res) {
   try {
     const response = await Blog.findAll({
@@ -32,6 +34,7 @@ async function getLatestBlogs(req, res) {
   }
 }
 
+// get blogs created by the current user
 async function getMyBlogs(req, res) {
   const user_id = req.userData.user_id;
 
@@ -50,6 +53,7 @@ async function getMyBlogs(req, res) {
   }
 }
 
+// get blogs created by a certain user
 async function getUserBlogs(req, res) {
   const { user_id } = req.params;
 
@@ -68,6 +72,7 @@ async function getUserBlogs(req, res) {
   }
 }
 
+// get comments on a certain blog
 async function getBlogComments(req, res) {
   const { id } = req.params;
 
@@ -108,6 +113,7 @@ async function getBlogCommentsCount(req, res) {
   }
 }
 
+// get data about a certain blog
 async function getBlog(req, res) {
   const { id } = req.params;
 

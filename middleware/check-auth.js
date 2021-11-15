@@ -1,5 +1,6 @@
 const JWT = require("jsonwebtoken");
 
+// check for a JWT token in the HTTP request
 function checkAuth(req, res, next) {
   try {
     const token = req.headers.authorization.split(" ")[1];
@@ -14,6 +15,7 @@ function checkAuth(req, res, next) {
   }
 }
 
+// check for a JWT token in the HTTP request & allowing only admin, based on user type in the Token Signature
 function checkAuthAdmin(req, res, next) {
   try {
     const token = req.headers.authorization.split(" ")[1];
